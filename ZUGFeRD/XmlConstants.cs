@@ -16,13 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace s2industries.ZUGFeRD
 {
-    public class XmlConstants
+    internal class XmlConstants
     {
         /// <summary>
         /// Xml new line. Works just like Environment.NewLine.

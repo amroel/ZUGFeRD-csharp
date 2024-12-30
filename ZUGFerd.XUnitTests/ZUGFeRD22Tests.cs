@@ -2649,7 +2649,7 @@ namespace s2industries.ZUGFeRD.Tests
             paymentTerms.Should().HaveCount(1);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             paymentTerm.Should().NotBeNull();
-            paymentTerm!.Description.Should().Be($"#SKONTO#TAGE=14#PROZENT=2.25#{XmlConstants.XmlNewLine}Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#");
+            paymentTerm!.Description.Should().Be($"#SKONTO#TAGE=14#PROZENT=2.25#&#10;Description2&#10;#SKONTO#TAGE=28#PROZENT=1.00#");
             paymentTerm.DueDate.Should().Be(timestamp.AddDays(14));
             paymentTerm.PaymentTermsType.Should().BeNull();
             paymentTerm.DueDays.Should().BeNull();
