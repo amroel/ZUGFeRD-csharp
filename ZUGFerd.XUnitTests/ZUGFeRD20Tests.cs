@@ -21,6 +21,7 @@ using FluentAssertions;
 
 namespace s2industries.ZUGFeRD.Tests
 {
+    [Collection("Sequential")] // run tests sequentially because we are dealing with file system
     public class ZUGFeRD20Tests : TestBase
     {
         private readonly InvoiceProvider InvoiceProvider = new();
