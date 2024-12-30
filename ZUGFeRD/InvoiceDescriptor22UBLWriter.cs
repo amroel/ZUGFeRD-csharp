@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace s2industries.ZUGFeRD
 {
@@ -53,11 +52,11 @@ namespace s2industries.ZUGFeRD
                 { "xs", "http://www.w3.org/2001/XMLSchema" }
             };
             if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
-            {             
+            {
                 _namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
             else if (this.Descriptor.Type == InvoiceType.CreditNote)
-            {                
+            {
                 _namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
             }
             this.Writer.SetNamespaces(_namespaces);
@@ -228,7 +227,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("cac", "Delivery");
 
                 if (this.Descriptor.ActualDeliveryDate.HasValue)
-                {                 
+                {
                     Writer.WriteStartElement("cbc", "ActualDeliveryDate");
                     Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate.Value, false, true));
                     Writer.WriteEndElement(); // !ActualDeliveryDate                 
@@ -349,7 +348,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
                     }
-                    
+
                     Writer.WriteStartElement("cac", "PaymentMandate");
 
                     //PEPPOL-EN16931-R061: Mandate reference MUST be provided for direct debit.
@@ -393,13 +392,13 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteRawString(Environment.NewLine);
                         Writer.WriteRawIndention();
-                        Writer.WriteValue(paymentTerms.Description);                                             
+                        Writer.WriteValue(paymentTerms.Description);
                     }
 
                     Writer.WriteRawString(Environment.NewLine);
                     Writer.WriteEndElement(); // !Note()
                 }
-                
+
                 Writer.WriteEndElement(); // !PaymentTerms
             }
 
@@ -508,7 +507,7 @@ namespace s2industries.ZUGFeRD
         }
 
         private void _WriteTradeLineItem(TradeLineItem tradeLineItem)
-        {   
+        {
             if (String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
             {
                 Writer.WriteStartElement("cac", "InvoiceLine");
@@ -660,7 +659,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158
-                writer.WriteValue(classification.ClassCode, profile : ALL_PROFILES);
+                writer.WriteValue(classification.ClassCode, profile: ALL_PROFILES);
                 Writer.WriteAttributeString("listID", classification.ListID.EnumToString()); // BT-158-1
 
                 if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
@@ -912,15 +911,15 @@ namespace s2industries.ZUGFeRD
 
         private void _writeIncludedReferencedProducts(ProfileAwareXmlTextWriter writer, List<IncludedReferencedProduct> includedReferencedProducts)
         {
-            if(includedReferencedProducts.Count > 0)
+            if (includedReferencedProducts.Count > 0)
             {
-                foreach(var item in includedReferencedProducts)
+                foreach (var item in includedReferencedProducts)
                 {
                     //TODO: 
                 }
             }
         }
-            
+
         private void _writeApplicableProductCharacteristics(ProfileAwareXmlTextWriter writer, List<ApplicableProductCharacteristic> productCharacteristics)
         {
 
