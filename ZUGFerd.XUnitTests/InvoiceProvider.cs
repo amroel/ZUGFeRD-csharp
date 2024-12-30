@@ -88,12 +88,14 @@ namespace s2industries.ZUGFeRD.Tests
             //desc.AddDebitorFinancialAccount(iban: "DB02120300000000202051", bic: "DBBYLADEM1001", bankName: "KundenDB AG");
             desc.AddApplicableTradeTax(basisAmount: 275.0m,
                                  percent: 7m,
+                                 taxAmount: 19.25m,
                                  typeCode: TaxTypes.VAT,
                                  categoryCode: TaxCategoryCodes.S
                                  );
 
             desc.AddApplicableTradeTax(basisAmount: 198.0m,
                                        percent: 19m,
+                                       taxAmount: 29.82m,
                                        typeCode: TaxTypes.VAT,
                                        categoryCode: TaxCategoryCodes.S
                                        );

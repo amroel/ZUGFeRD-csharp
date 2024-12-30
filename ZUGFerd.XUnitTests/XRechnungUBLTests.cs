@@ -228,10 +228,11 @@ namespace s2industries.ZUGFeRD.Tests
             // actual values do not matter
             var basisAmount = 123.0m;
             var percent = 11.0m;
+            var taxAmount = 12.0m;
             var allowanceChargeBasisAmount = 121.0m;
 
             InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-            desc.AddApplicableTradeTax(basisAmount, percent, TaxTypes.LOC, TaxCategoryCodes.K, allowanceChargeBasisAmount);
+            desc.AddApplicableTradeTax(basisAmount, percent, taxAmount, TaxTypes.LOC, TaxCategoryCodes.K, allowanceChargeBasisAmount);
             var ms = new MemoryStream();
 
             desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
@@ -239,7 +240,7 @@ namespace s2industries.ZUGFeRD.Tests
 
             var loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Tax tax = loadedInvoice.Taxes.FirstOrDefault(t => t.TypeCode == TaxTypes.LOC);
+            Tax? tax = loadedInvoice.Taxes.FirstOrDefault(t => t.TypeCode == TaxTypes.LOC);
             tax.Should().NotBeNull();
             tax.BasisAmount.Should().Be(basisAmount);
             tax.Percent.Should().Be(percent);
@@ -757,6 +758,7 @@ namespace s2industries.ZUGFeRD.Tests
             d.AddApplicableTradeTax(
                 198.00m,
                 19.00m,
+                taxAmount: 37.62m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
 
@@ -847,6 +849,7 @@ namespace s2industries.ZUGFeRD.Tests
             d.AddApplicableTradeTax(
                 198.00m,
                 19.00m,
+                taxAmount: 37.62m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
 
@@ -934,6 +937,7 @@ namespace s2industries.ZUGFeRD.Tests
             d.AddApplicableTradeTax(
                 198.00m,
                 19.00m,
+                taxAmount: 37.62m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
 

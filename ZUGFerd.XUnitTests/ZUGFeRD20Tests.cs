@@ -292,11 +292,13 @@ namespace s2industries.ZUGFeRD.Tests
             d.AddApplicableTradeTax(
                 275.00m,
                 7.00m,
+                taxAmount: 19.25m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
             d.AddApplicableTradeTax(
                 198.00m,
                 19.00m,
+                taxAmount: 29.82m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
 
