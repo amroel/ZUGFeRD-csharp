@@ -17,12 +17,8 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml;
 
 
 namespace s2industries.ZUGFeRD
@@ -54,7 +50,7 @@ namespace s2industries.ZUGFeRD
 
             if (_writer == null)
             {
-                throw new UnsupportedException($"Profile {descriptor.Profile.EnumToString()} and format {format.EnumToString()} is not supported.");                
+                throw new UnsupportedException($"Profile {descriptor.Profile.EnumToString()} and format {format.EnumToString()} is not supported.");
             }
 
             _writer.Save(descriptor, stream, format);
