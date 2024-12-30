@@ -161,7 +161,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteOptionalElementString("ram", "Name", tradeLineItem.Name);
                 Writer.WriteOptionalElementString("ram", "Description", tradeLineItem.Description);
 
-                if (tradeLineItem.ApplicableProductCharacteristics != null && tradeLineItem.ApplicableProductCharacteristics.Any())
+                if (tradeLineItem.ApplicableProductCharacteristics != null && tradeLineItem.ApplicableProductCharacteristics.Count > 0)
                 {
                     foreach (var productCharacteristic in tradeLineItem.ApplicableProductCharacteristics)
                     {
@@ -172,7 +172,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if (tradeLineItem.IncludedReferencedProducts != null && tradeLineItem.IncludedReferencedProducts.Any())
+                if (tradeLineItem.IncludedReferencedProducts != null && tradeLineItem.IncludedReferencedProducts.Count > 0)
                 {
                     foreach (var includedItem in tradeLineItem.IncludedReferencedProducts)
                     {
