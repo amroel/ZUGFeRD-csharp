@@ -1122,27 +1122,6 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalContact()
 
 
-        private string _translateInvoiceType(InvoiceType type)
-        {
-            switch (type)
-            {
-                case InvoiceType.SelfBilledInvoice:
-                case InvoiceType.Invoice: return "RECHNUNG";
-                case InvoiceType.SelfBilledCreditNote:
-                case InvoiceType.CreditNote: return "GUTSCHRIFT";
-                case InvoiceType.DebitNote: return "BELASTUNGSANZEIGE";
-                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";
-                case InvoiceType.PartialInvoice: return "TEILRECHNUNG";
-                case InvoiceType.PrepaymentInvoice: return "VORAUSZAHLUNGSRECHNUNG";
-                case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
-                case InvoiceType.Correction:
-                case InvoiceType.CorrectionOld: return "KORREKTURRECHNUNG";
-                case InvoiceType.Unknown: return String.Empty;
-                default: return String.Empty;
-            }
-        } // !_translateInvoiceType()
-
-
         private int _encodeInvoiceType(InvoiceType type)
         {
             if ((int)type > 1000)
