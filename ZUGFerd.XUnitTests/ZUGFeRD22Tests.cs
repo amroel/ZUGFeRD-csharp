@@ -16,6 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using FluentAssertions;
 
@@ -278,7 +280,7 @@ namespace s2industries.ZUGFeRD.Tests
             desc.InvoiceNo.Should().Be("471102");
             desc.TradeLineItems.Should().HaveCount(1);
             desc.LineTotalAmount.Should().Be(198.0m);
-        } // !TestReferenceBasicFacturXInvoice()
+        }
 
         [Fact]
         public void TestStoringReferenceBasicFacturXInvoice()
@@ -324,7 +326,7 @@ namespace s2industries.ZUGFeRD.Tests
             desc.LineTotalAmount.Should().Be(198.0m);
             desc.Taxes[0].TaxAmount.Should().Be(37.62m);
             desc.Taxes[0].Percent.Should().Be(19.0m);
-        } // !TestStoringReferenceBasicFacturXInvoice()
+        }
 
         [Fact]
         public void TestReferenceBasicWLInvoice()
@@ -341,7 +343,7 @@ namespace s2industries.ZUGFeRD.Tests
             desc.InvoiceNo.Should().Be("471102");
             desc.TradeLineItems.Should().BeEmpty();
             desc.LineTotalAmount.Should().Be(624.90m);
-        } // !TestReferenceBasicWLInvoice()
+        }
 
         [Fact]
         public void TestReferenceExtendedInvoice()
@@ -379,7 +381,7 @@ namespace s2industries.ZUGFeRD.Tests
             desc.ServiceCharges[0].Tax.TypeCode.Should().Be(TaxTypes.VAT);
             desc.ServiceCharges[0].Tax.CategoryCode.Should().Be(TaxCategoryCodes.S);
             desc.ServiceCharges[0].Tax.Percent.Should().Be(19m);
-        } // !TestReferenceExtendedInvoice()
+        }
 
         [Fact]
         public void TestReferenceMinimumInvoice()
@@ -397,7 +399,7 @@ namespace s2industries.ZUGFeRD.Tests
             desc.TradeLineItems.Should().BeEmpty();
             desc.LineTotalAmount.Should().Be(0.0m); // not present in file
             desc.TaxBasisAmount.Should().Be(198.0m);
-        } // !TestReferenceMinimumInvoice()
+        }
 
         [Fact]
         public void TestReferenceXRechnung1CII()
@@ -412,7 +414,7 @@ namespace s2industries.ZUGFeRD.Tests
             desc.InvoiceNo.Should().Be("0815-99-1-a");
             desc.TradeLineItems.Should().HaveCount(2);
             desc.LineTotalAmount.Should().Be(1445.98m);
-        } // !TestReferenceXRechnung1CII()
+        }
 
         [Fact]
         public void TestElectronicAddress()
@@ -435,7 +437,7 @@ namespace s2industries.ZUGFeRD.Tests
             loadedInvoice.SellerElectronicAddress.ElectronicAddressSchemeID.Should().Be(ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
             loadedInvoice.BuyerElectronicAddress.Address.Should().Be("LU987654321");
             loadedInvoice.BuyerElectronicAddress.ElectronicAddressSchemeID.Should().Be(ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
-        } // !TestElectronicAddress()
+        }
 
         [Fact]
         public void TestMinimumInvoice()
@@ -464,7 +466,7 @@ namespace s2industries.ZUGFeRD.Tests
             loadedInvoice.Seller.Should().NotBeNull();
             loadedInvoice.Seller.SpecifiedLegalOrganization.Should().NotBeNull();
             loadedInvoice.Seller.SpecifiedLegalOrganization.TradingBusinessName.Should().BeEmpty();
-        } // !TestMinimumInvoice()
+        }
 
         [Fact]
         public void TestInvoiceWithAttachmentXRechnung()
@@ -498,7 +500,7 @@ namespace s2industries.ZUGFeRD.Tests
                     break;
                 }
             }
-        } // !TestInvoiceWithAttachmentXRechnung()
+        }
 
         [Fact]
         public void TestInvoiceWithAttachmentExtended()
@@ -533,8 +535,7 @@ namespace s2industries.ZUGFeRD.Tests
                     break;
                 }
             }
-        } // !TestInvoiceWithAttachmentExtended()
-
+        }
 
         [Fact]
         public void TestInvoiceWithAttachmentComfort()
@@ -569,7 +570,7 @@ namespace s2industries.ZUGFeRD.Tests
                     break;
                 }
             }
-        } // !TestInvoiceWithAttachmentComfort()
+        }
 
         [Fact]
         public void TestInvoiceWithAttachmentBasic()
@@ -594,7 +595,7 @@ namespace s2industries.ZUGFeRD.Tests
             var loadedInvoice = InvoiceDescriptor.Load(ms);
 
             loadedInvoice.AdditionalReferencedDocuments.Should().BeEmpty();
-        } // !TestInvoiceWithAttachmentBasic()
+        }
 
         [Fact]
         public void TestXRechnung1()
@@ -609,7 +610,7 @@ namespace s2industries.ZUGFeRD.Tests
 
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.Profile.Should().Be(Profile.XRechnung1);
-        } // !TestXRechnung1()
+        }
 
         [Fact]
         public void TestXRechnung2()
@@ -624,7 +625,7 @@ namespace s2industries.ZUGFeRD.Tests
             ms.Seek(0, SeekOrigin.Begin);
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.Profile.Should().Be(Profile.XRechnung);
-        } // !TestXRechnung2()
+        }
 
         [Fact]
         public void TestCreateInvoice_WithProfileEReporting()
@@ -639,7 +640,7 @@ namespace s2industries.ZUGFeRD.Tests
             ms.Seek(0, SeekOrigin.Begin);
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.Profile.Should().Be(Profile.EReporting);
-        } // !TestCreateInvoice_WithProfileEReporting()
+        }
 
         [Fact]
         public void TestBuyerOrderReferencedDocumentWithExtended()
@@ -659,7 +660,7 @@ namespace s2industries.ZUGFeRD.Tests
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.OrderNo.Should().Be(uuid);
             loadedInvoice.OrderDate.Should().Be(orderDate);// explicitly not to be set in XRechnung, see separate test case
-        } // !TestBuyerOrderReferencedDocumentWithExtended() 
+        }
 
         [Fact]
         public void TestBuyerOrderReferencedDocumentWithXRechnung()
@@ -679,7 +680,7 @@ namespace s2industries.ZUGFeRD.Tests
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.OrderNo.Should().Be(uuid);
             loadedInvoice.OrderDate.Should().BeNull(); // explicitly not to be set in XRechnung, see separate test case
-        } // !TestBuyerOrderReferencedDocumentWithXRechnung() 
+        }
 
         [Fact]
         public void TestContractReferencedDocumentWithXRechnung()
@@ -704,7 +705,7 @@ namespace s2industries.ZUGFeRD.Tests
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.ContractReferencedDocument.ID.Should().Be(uuid);
             loadedInvoice.ContractReferencedDocument.IssueDateTime.Should().BeNull(); // explicitly not to be set in XRechnung
-        } // !TestContractReferencedDocumentWithXRechnung()
+        }
 
         [Fact]
         public void TestContractReferencedDocumentWithExtended()
@@ -729,7 +730,7 @@ namespace s2industries.ZUGFeRD.Tests
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.ContractReferencedDocument.ID.Should().Be(uuid);
             loadedInvoice.ContractReferencedDocument.IssueDateTime.Should().Be(issueDateTime);// explicitly not to be set in XRechnung, see separate test case
-        } // !TestContractReferencedDocumentWithExtended()        
+        }
 
         [Fact]
         public void TestTotalRoundingExtended()
@@ -758,7 +759,7 @@ namespace s2industries.ZUGFeRD.Tests
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
             loadedInvoice.RoundingAmount.Should().Be(0m);
-        } // !TestTotalRoundingExtended()
+        }
 
         [Fact]
         public void TestTotalRoundingXRechnung()
@@ -787,7 +788,7 @@ namespace s2industries.ZUGFeRD.Tests
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
             loadedInvoice.RoundingAmount.Should().Be(0m);
-        } // !TestTotalRoundingExtended()
+        }
 
         [Fact]
         public void TestMissingPropertiesAreNull()
@@ -872,8 +873,8 @@ namespace s2industries.ZUGFeRD.Tests
 
             // Modifiy trade line settlement data
             TradeLineItem item0 = originalInvoiceDescriptor.AddTradeLineItem(name: string.Empty);
-            item0.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
-            {
+            item0.ApplicableProductCharacteristics =
+            [
                 new ApplicableProductCharacteristic()
                 {
                     Description = "Description_1_1",
@@ -884,11 +885,11 @@ namespace s2industries.ZUGFeRD.Tests
                     Description = "Description_1_2",
                     Value = "Value_1_2"
                 }
-            };
+            ];
 
             TradeLineItem item1 = originalInvoiceDescriptor.AddTradeLineItem(name: string.Empty);
-            item1.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
-            {
+            item1.ApplicableProductCharacteristics =
+            [
                 new ApplicableProductCharacteristic()
                 {
                     Description = "Description_2_1",
@@ -899,7 +900,7 @@ namespace s2industries.ZUGFeRD.Tests
                     Description = "Description_2_2",
                     Value = "Value_2_2"
                 }
-            };
+            ];
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -1068,16 +1069,18 @@ namespace s2industries.ZUGFeRD.Tests
                 .Description.Trim()
                 .Should()
                 .Be("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
-        } // !TestLoadingSepaPreNotification()
+        }
 
         [Fact]
         public void TestStoringSepaPreNotification()
         {
-            var d = new InvoiceDescriptor();
-            d.Type = InvoiceType.Invoice;
-            d.InvoiceNo = "471102";
-            d.Currency = CurrencyCodes.EUR;
-            d.InvoiceDate = new DateTime(2018, 3, 5);
+            var d = new InvoiceDescriptor
+            {
+                Type = InvoiceType.Invoice,
+                InvoiceNo = "471102",
+                Currency = CurrencyCodes.EUR,
+                InvoiceDate = new DateTime(2018, 3, 5)
+            };
             d.AddTradeLineItem(
                 lineID: "1",
                 id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
@@ -1174,7 +1177,7 @@ namespace s2industries.ZUGFeRD.Tests
             d.Seller.SpecifiedLegalOrganization.ID.SchemeID!.Value.EnumToString().Should().Be("0088");
             d.Seller.SpecifiedLegalOrganization.ID.ID.Should().Be("4000001123452");
             d.Seller.SpecifiedLegalOrganization.TradingBusinessName.Should().Be("Lieferant GmbH");
-        } // !TestStoringSepaPreNotification()
+        }
 
         [Fact]
         public void TestValidTaxTypes()
@@ -1248,7 +1251,7 @@ namespace s2industries.ZUGFeRD.Tests
             {
                 Assert.Fail();
             }
-        } // !TestValidTaxTypes()
+        }
 
         [Fact]
         public void TestInvalidTaxTypes()
@@ -1312,7 +1315,7 @@ namespace s2industries.ZUGFeRD.Tests
             {
                 Assert.Fail();
             }
-        } // !TestInvalidTaxTypes()
+        }
 
         [Fact]
         public void TestAdditionalReferencedDocument()
@@ -1327,15 +1330,11 @@ namespace s2industries.ZUGFeRD.Tests
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
-            var reader = new StreamReader(ms);
-            var text = reader.ReadToEnd();
-
-            ms.Seek(0, SeekOrigin.Begin);
             var loadedInvoice = InvoiceDescriptor.Load(ms);
             loadedInvoice.AdditionalReferencedDocuments.Should().HaveCount(1);
             loadedInvoice.AdditionalReferencedDocuments[0].Name.Should().Be("Additional Test Document");
             loadedInvoice.AdditionalReferencedDocuments[0].IssueDateTime.Should().Be(issueDateTime);
-        } // !TestAdditionalReferencedDocument()
+        }
 
         [Fact]
         public void TestPartyExtensions()
@@ -1456,7 +1455,7 @@ namespace s2industries.ZUGFeRD.Tests
                 ?.Element(ram + "PayeeTradeParty")
                 ?.Element(ram + "PostalTradeAddress")?
                 .Should().BeNull();// !!!
-        } // !TestMinimumInvoice()
+        }
 
         [Theory]
         [InlineData(Profile.Minimum)]
@@ -1511,7 +1510,6 @@ namespace s2industries.ZUGFeRD.Tests
             InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.First().ShipTo = expected;
 
-            // test minimum
             var ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, profile);
             ms.Seek(0, SeekOrigin.Begin);
@@ -1523,1373 +1521,1320 @@ namespace s2industries.ZUGFeRD.Tests
             else
                 loadedInvoice.TradeLineItems.First().ShipTo
                     .Should().BeEquivalentTo(expected, options => options.Including(x => x.Name).Including(x => x.City));
-        } // !TestShipToTradePartyOnItemLevel()
-
-        //[Fact]
-        //public void TestUltimateShipToTradePartyOnItemLevel()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    desc.TradeLineItems.First().UltimateShipTo = new Party()
-        //    {
-        //        Name = "ShipTo",
-        //        City = "ShipToCity"
-        //    };
-
-        //    // test minimum
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.IsNotNull(loadedInvoice.TradeLineItems);
-        //    Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-        //    Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
-
-        //    // test basic
-        //    ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.IsNotNull(loadedInvoice.TradeLineItems);
-        //    Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-        //    Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
-
-        //    // test comfort
-        //    ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.IsNotNull(loadedInvoice.TradeLineItems);
-        //    Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-        //    Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
-
-        //    // test extended
-        //    ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.IsNotNull(loadedInvoice.TradeLineItems);
-        //    Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-        //    Assert.IsNotNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
-
-        //    Assert.AreEqual(loadedInvoice.TradeLineItems.First().UltimateShipTo.Name, "ShipTo");
-        //    Assert.AreEqual(loadedInvoice.TradeLineItems.First().UltimateShipTo.City, "ShipToCity");
-        //} // !TestUltimateShipToTradePartyOnItemLevel()
-
-
-        //[Fact]
-        //public void TestMimetypeOfEmbeddedAttachment()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    var filename1 = "myrandomdata.pdf";
-        //    var filename2 = "myrandomdata.bin";
-        //    DateTime timestamp = DateTime.Now.Date;
-        //    var data = new byte[32768];
-        //    new Random().NextBytes(data);
-
-        //    desc.AddAdditionalReferencedDocument(
-        //        id: "My-File-PDF",
-        //        typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
-        //        issueDateTime: timestamp,
-        //        name: "EmbeddedPdf",
-        //        attachmentBinaryObject: data,
-        //        filename: filename1);
-
-        //    desc.AddAdditionalReferencedDocument(
-        //        id: "My-File-BIN",
-        //        typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
-        //        issueDateTime: timestamp.AddDays(-2),
-        //        name: "EmbeddedPdf",
-        //        attachmentBinaryObject: data,
-        //        filename: filename2);
-
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Seek(0, SeekOrigin.Begin);
-
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 2);
-
-        //    foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
-        //    {
-        //        if (document.ID == "My-File-PDF")
-        //        {
-        //            Assert.AreEqual(document.Filename, filename1);
-        //            Assert.AreEqual("application/pdf", document.MimeType);
-        //            Assert.AreEqual(timestamp, document.IssueDateTime);
-        //        }
-
-        //        if (document.ID == "My-File-BIN")
-        //        {
-        //            Assert.AreEqual(document.Filename, filename2);
-        //            Assert.AreEqual("application/octet-stream", document.MimeType);
-        //            Assert.AreEqual(timestamp.AddDays(-2), document.IssueDateTime);
-        //        }
-        //    }
-        //} // !TestMimetypeOfEmbeddedAttachment()
-
-        //[Fact]
-        //public void TestOrderInformation()
-        //{
-        //    var path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
-        //    path = _makeSurePathIsCrossPlatformCompatible(path);
-
-        //    DateTime timestamp = DateTime.Now.Date;
-
-        //    Stream s = File.Open(path, FileMode.Open);
-        //    var desc = InvoiceDescriptor.Load(s);
-        //    desc.OrderDate = timestamp;
-        //    desc.OrderNo = "12345";
-        //    s.Close();
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-
-        //    desc.Save("..\\output.xml", ZUGFeRDVersion.Version23, Profile.Extended);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var reader = new StreamReader(ms);
-        //    var text = reader.ReadToEnd();
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-        //    Assert.AreEqual(timestamp, loadedInvoice.OrderDate);
-        //    Assert.AreEqual("12345", loadedInvoice.OrderNo);
-
-        //} // !TestOrderInformation()
-
-        //[Fact]
-        //public void TestSellerOrderReferencedDocument()
-        //{
-        //    var uuid = Guid.NewGuid().ToString();
-        //    DateTime issueDateTime = DateTime.Today;
-
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
-        //    {
-        //        ID = uuid,
-        //        IssueDateTime = issueDateTime
-        //    };
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var reader = new StreamReader(ms);
-        //    var text = reader.ReadToEnd();
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
-        //    Assert.AreEqual(uuid, loadedInvoice.SellerOrderReferencedDocument.ID);
-        //    Assert.AreEqual(issueDateTime, loadedInvoice.SellerOrderReferencedDocument.IssueDateTime);
-        //} // !TestSellerOrderReferencedDocument()
-
-        //[Fact]
-        //public void TestWriteAndReadBusinessProcess()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    desc.BusinessProcess = "A1";
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual("A1", loadedInvoice.BusinessProcess);
-        //} // !TestWriteAndReadBusinessProcess
-
-        ///// <summary>
-        ///// This test ensure that Writer and Reader uses the same path and namespace for elements
-        ///// </summary>
-        //[Fact]
-        //public void TestWriteAndReadExtended()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    var filename2 = "myrandomdata.bin";
-        //    DateTime timestamp = DateTime.Now.Date;
-        //    var data = new byte[32768];
-        //    new Random().NextBytes(data);
-
-        //    desc.AddAdditionalReferencedDocument(
-        //        id: "My-File-BIN",
-        //        typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
-        //        issueDateTime: timestamp.AddDays(-2),
-        //        name: "EmbeddedPdf",
-        //        attachmentBinaryObject: data,
-        //        filename: filename2);
-
-        //    desc.OrderNo = "12345";
-        //    desc.OrderDate = timestamp;
-
-        //    desc.SetContractReferencedDocument("12345", timestamp);
-
-        //    desc.SpecifiedProcuringProject = new SpecifiedProcuringProject { ID = "123", Name = "Project 123" };
-
-        //    desc.ShipTo = new Party
-        //    {
-        //        ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
-        //        GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
-        //        Name = "Ship To",
-        //        ContactName = "Max Mustermann",
-        //        Street = "Münchnerstr. 55",
-        //        Postcode = "83022",
-        //        City = "Rosenheim",
-        //        Country = CountryCodes.DE
-        //    };
-
-        //    desc.UltimateShipTo = new Party
-        //    {
-        //        ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
-        //        GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
-        //        Name = "Ultimate Ship To",
-        //        ContactName = "Max Mustermann",
-        //        Street = "Münchnerstr. 55",
-        //        Postcode = "83022",
-        //        City = "Rosenheim",
-        //        Country = CountryCodes.DE
-        //    };
-
-        //    desc.ShipFrom = new Party
-        //    {
-        //        ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
-        //        GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
-        //        Name = "Ship From",
-        //        ContactName = "Eva Musterfrau",
-        //        Street = "Alpenweg 5",
-        //        Postcode = "83022",
-        //        City = "Rosenheim",
-        //        Country = CountryCodes.DE
-        //    };
-
-        //    desc.PaymentMeans.SEPACreditorIdentifier = "SepaID";
-        //    desc.PaymentMeans.SEPAMandateReference = "SepaMandat";
-        //    desc.PaymentMeans.FinancialCard = new FinancialCard { Id = "123", CardholderName = "Mustermann" };
-
-        //    desc.PaymentReference = "PaymentReference";
-
-        //    desc.Invoicee = new Party()
-        //    {
-        //        Name = "Test",
-        //        ContactName = "Max Mustermann",
-        //        Postcode = "83022",
-        //        City = "Rosenheim",
-        //        Street = "Münchnerstraße 123",
-        //        AddressLine3 = "EG links",
-        //        CountrySubdivisionName = "Bayern",
-        //        Country = CountryCodes.DE
-        //    };
-
-        //    desc.Payee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
-        //    {
-        //        Name = "Test",
-        //        ContactName = "Max Mustermann",
-        //        Postcode = "83022",
-        //        City = "Rosenheim",
-        //        Street = "Münchnerstraße 123",
-        //        AddressLine3 = "EG links",
-        //        CountrySubdivisionName = "Bayern",
-        //        Country = CountryCodes.DE
-        //    };
-
-        //    desc.AddDebitorFinancialAccount(iban: "DE02120300000000202052", bic: "BYLADEM1001", bankName: "Musterbank");
-        //    desc.BillingPeriodStart = timestamp;
-        //    desc.BillingPeriodEnd = timestamp.AddDays(14);
-
-        //    desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m);
-        //    desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
-
-        //    desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
-        //    desc.AddInvoiceReferencedDocument("RE-12345", timestamp);
-
-
-        //    //set additional LineItem data
-        //    var lineItem = desc.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
-        //    Assert.IsNotNull(lineItem);
-        //    lineItem.Description = "This is line item TB100A4";
-        //    lineItem.BuyerAssignedID = "0815";
-        //    lineItem.SetOrderReferencedDocument("12345", timestamp);
-        //    lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp);
-        //    lineItem.SetContractReferencedDocument("12345", timestamp);
-
-        //    lineItem.AddAdditionalReferencedDocument("xyz", AdditionalReferencedDocumentTypeCode.ReferenceDocument, ReferenceTypeCodes.AAB, timestamp);
-
-        //    lineItem.UnitQuantity = 3m;
-        //    lineItem.ActualDeliveryDate = timestamp;
-
-        //    lineItem.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic
-        //    {
-        //        Description = "Product characteristics",
-        //        Value = "Product value"
-        //    });
-
-        //    lineItem.BillingPeriodStart = timestamp;
-        //    lineItem.BillingPeriodEnd = timestamp.AddDays(10);
-
-        //    lineItem.AddReceivableSpecifiedTradeAccountingAccount("987654");
-        //    lineItem.AddTradeAllowanceCharge(false, CurrencyCodes.EUR, 10m, 50m, "Reason: UnitTest");
-
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual("471102", loadedInvoice.InvoiceNo);
-        //    Assert.AreEqual(new DateTime(2018, 03, 05), loadedInvoice.InvoiceDate);
-        //    Assert.AreEqual(CurrencyCodes.EUR, loadedInvoice.Currency);
-        //    Assert.IsTrue(loadedInvoice.Notes.Any(n => n.Content == "Rechnung gemäß Bestellung vom 01.03.2018."));
-        //    Assert.AreEqual("04011000-12345-34", loadedInvoice.ReferenceOrderNo);
-        //    Assert.AreEqual("Lieferant GmbH", loadedInvoice.Seller.Name);
-        //    Assert.AreEqual("80333", loadedInvoice.Seller.Postcode);
-        //    Assert.AreEqual("München", loadedInvoice.Seller.City);
-
-        //    Assert.AreEqual("Lieferantenstraße 20", loadedInvoice.Seller.Street);
-        //    Assert.AreEqual(CountryCodes.DE, loadedInvoice.Seller.Country);
-        //    Assert.AreEqual(GlobalIDSchemeIdentifiers.GLN, loadedInvoice.Seller.GlobalID.SchemeID);
-        //    Assert.AreEqual("4000001123452", loadedInvoice.Seller.GlobalID.ID);
-        //    Assert.AreEqual("Max Mustermann", loadedInvoice.SellerContact.Name);
-        //    Assert.AreEqual("Muster-Einkauf", loadedInvoice.SellerContact.OrgUnit);
-        //    Assert.AreEqual("Max@Mustermann.de", loadedInvoice.SellerContact.EmailAddress);
-        //    Assert.AreEqual("+49891234567", loadedInvoice.SellerContact.PhoneNo);
-
-        //    Assert.AreEqual("Kunden AG Mitte", loadedInvoice.Buyer.Name);
-        //    Assert.AreEqual("69876", loadedInvoice.Buyer.Postcode);
-        //    Assert.AreEqual("Frankfurt", loadedInvoice.Buyer.City);
-        //    Assert.AreEqual("Kundenstraße 15", loadedInvoice.Buyer.Street);
-        //    Assert.AreEqual(CountryCodes.DE, loadedInvoice.Buyer.Country);
-        //    Assert.AreEqual<string>("GE2020211", loadedInvoice.Buyer.ID.ID);
-
-        //    Assert.AreEqual("12345", loadedInvoice.OrderNo);
-        //    Assert.AreEqual(timestamp, loadedInvoice.OrderDate);
-
-        //    Assert.AreEqual("12345", loadedInvoice.ContractReferencedDocument.ID);
-        //    Assert.AreEqual(timestamp, loadedInvoice.ContractReferencedDocument.IssueDateTime);
-
-        //    Assert.AreEqual("123", loadedInvoice.SpecifiedProcuringProject.ID);
-        //    Assert.AreEqual("Project 123", loadedInvoice.SpecifiedProcuringProject.Name);
-
-        //    Assert.AreEqual("Ultimate Ship To", loadedInvoice.UltimateShipTo.Name);
-        //    /** 
-        //     * @todo we can add further asserts for the remainder of properties 
-        //     */
-
-        //    Assert.AreEqual<string>("123", loadedInvoice.ShipTo.ID.ID);
-        //    Assert.AreEqual(GlobalIDSchemeIdentifiers.DUNS, loadedInvoice.ShipTo.GlobalID.SchemeID);
-        //    Assert.AreEqual("789", loadedInvoice.ShipTo.GlobalID.ID);
-        //    Assert.AreEqual("Ship To", loadedInvoice.ShipTo.Name);
-        //    Assert.AreEqual("Max Mustermann", loadedInvoice.ShipTo.ContactName);
-        //    Assert.AreEqual("Münchnerstr. 55", loadedInvoice.ShipTo.Street);
-        //    Assert.AreEqual("83022", loadedInvoice.ShipTo.Postcode);
-        //    Assert.AreEqual("Rosenheim", loadedInvoice.ShipTo.City);
-        //    Assert.AreEqual(CountryCodes.DE, loadedInvoice.ShipTo.Country);
-
-        //    Assert.AreEqual<string>("123", loadedInvoice.ShipFrom.ID.ID);
-        //    Assert.AreEqual(GlobalIDSchemeIdentifiers.DUNS, loadedInvoice.ShipFrom.GlobalID.SchemeID);
-        //    Assert.AreEqual("789", loadedInvoice.ShipFrom.GlobalID.ID);
-        //    Assert.AreEqual("Ship From", loadedInvoice.ShipFrom.Name);
-        //    Assert.AreEqual("Eva Musterfrau", loadedInvoice.ShipFrom.ContactName);
-        //    Assert.AreEqual("Alpenweg 5", loadedInvoice.ShipFrom.Street);
-        //    Assert.AreEqual("83022", loadedInvoice.ShipFrom.Postcode);
-        //    Assert.AreEqual("Rosenheim", loadedInvoice.ShipFrom.City);
-        //    Assert.AreEqual(CountryCodes.DE, loadedInvoice.ShipFrom.Country);
-
-
-        //    Assert.AreEqual(new DateTime(2018, 03, 05), loadedInvoice.ActualDeliveryDate);
-        //    Assert.AreEqual(PaymentMeansTypeCodes.SEPACreditTransfer, loadedInvoice.PaymentMeans.TypeCode);
-        //    Assert.AreEqual("Zahlung per SEPA Überweisung.", loadedInvoice.PaymentMeans.Information);
-
-        //    Assert.AreEqual("PaymentReference", loadedInvoice.PaymentReference);
-
-        //    Assert.AreEqual("", loadedInvoice.PaymentMeans.SEPACreditorIdentifier);
-        //    Assert.AreEqual("SepaMandat", loadedInvoice.PaymentMeans.SEPAMandateReference);
-        //    Assert.AreEqual("123", loadedInvoice.PaymentMeans.FinancialCard.Id);
-        //    Assert.AreEqual("Mustermann", loadedInvoice.PaymentMeans.FinancialCard.CardholderName);
-
-        //    var bankAccount = loadedInvoice.CreditorBankAccounts.FirstOrDefault(a => a.IBAN == "DE02120300000000202051");
-        //    Assert.IsNotNull(bankAccount);
-        //    Assert.AreEqual("Kunden AG", bankAccount.Name);
-        //    Assert.AreEqual("DE02120300000000202051", bankAccount.IBAN);
-        //    Assert.AreEqual("BYLADEM1001", bankAccount.BIC);
-
-        //    var debitorBankAccount = loadedInvoice.DebitorBankAccounts.FirstOrDefault(a => a.IBAN == "DE02120300000000202052");
-        //    Assert.IsNotNull(debitorBankAccount);
-        //    Assert.AreEqual("DE02120300000000202052", debitorBankAccount.IBAN);
-
-
-        //    Assert.AreEqual("Test", loadedInvoice.Invoicee.Name);
-        //    Assert.AreEqual("Max Mustermann", loadedInvoice.Invoicee.ContactName);
-        //    Assert.AreEqual("83022", loadedInvoice.Invoicee.Postcode);
-        //    Assert.AreEqual("Rosenheim", loadedInvoice.Invoicee.City);
-        //    Assert.AreEqual("Münchnerstraße 123", loadedInvoice.Invoicee.Street);
-        //    Assert.AreEqual("EG links", loadedInvoice.Invoicee.AddressLine3);
-        //    Assert.AreEqual("Bayern", loadedInvoice.Invoicee.CountrySubdivisionName);
-        //    Assert.AreEqual(CountryCodes.DE, loadedInvoice.Invoicee.Country);
-
-        //    Assert.AreEqual("Test", loadedInvoice.Payee.Name);
-        //    Assert.AreEqual("Max Mustermann", loadedInvoice.Payee.ContactName);
-        //    Assert.AreEqual("83022", loadedInvoice.Payee.Postcode);
-        //    Assert.AreEqual("Rosenheim", loadedInvoice.Payee.City);
-        //    Assert.AreEqual("Münchnerstraße 123", loadedInvoice.Payee.Street);
-        //    Assert.AreEqual("EG links", loadedInvoice.Payee.AddressLine3);
-        //    Assert.AreEqual("Bayern", loadedInvoice.Payee.CountrySubdivisionName);
-        //    Assert.AreEqual(CountryCodes.DE, loadedInvoice.Payee.Country);
-
-
-        //    var tax = loadedInvoice.Taxes.FirstOrDefault(t => t.BasisAmount == 275m);
-        //    Assert.IsNotNull(tax);
-        //    Assert.AreEqual(275m, tax.BasisAmount);
-        //    Assert.AreEqual(7m, tax.Percent);
-        //    Assert.AreEqual(TaxTypes.VAT, tax.TypeCode);
-        //    Assert.AreEqual(TaxCategoryCodes.S, tax.CategoryCode);
-
-        //    Assert.AreEqual(timestamp, loadedInvoice.BillingPeriodStart);
-        //    Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.BillingPeriodEnd);
-
-        //    //TradeAllowanceCharges
-        //    var tradeAllowanceCharge = loadedInvoice.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason for charge");
-        //    Assert.IsNotNull(tradeAllowanceCharge);
-        //    Assert.IsTrue(tradeAllowanceCharge.ChargeIndicator);
-        //    Assert.AreEqual("Reason for charge", tradeAllowanceCharge.Reason);
-        //    Assert.AreEqual(5m, tradeAllowanceCharge.BasisAmount);
-        //    Assert.AreEqual(15m, tradeAllowanceCharge.ActualAmount);
-        //    Assert.AreEqual(CurrencyCodes.EUR, tradeAllowanceCharge.Currency);
-        //    Assert.AreEqual(19m, tradeAllowanceCharge.Tax.Percent);
-        //    Assert.AreEqual(TaxTypes.AAB, tradeAllowanceCharge.Tax.TypeCode);
-        //    Assert.AreEqual(TaxCategoryCodes.AB, tradeAllowanceCharge.Tax.CategoryCode);
-
-        //    //ServiceCharges
-        //    var serviceCharge = desc.ServiceCharges.FirstOrDefault(i => i.Description == "Logistics service charge");
-        //    Assert.IsNotNull(serviceCharge);
-        //    Assert.AreEqual("Logistics service charge", serviceCharge.Description);
-        //    Assert.AreEqual(10m, serviceCharge.Amount);
-        //    Assert.AreEqual(7m, serviceCharge.Tax.Percent);
-        //    Assert.AreEqual(TaxTypes.AAC, serviceCharge.Tax.TypeCode);
-        //    Assert.AreEqual(TaxCategoryCodes.AC, serviceCharge.Tax.CategoryCode);
-
-        //    //PaymentTerms
-        //    var paymentTerms = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
-        //    Assert.IsNotNull(paymentTerms);
-        //    Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerms.Description);
-        //    Assert.AreEqual(timestamp.AddDays(14), paymentTerms.DueDate);
-
-        //    Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
-        //    Assert.AreEqual(0m, loadedInvoice.ChargeTotalAmount); // mandatory, even if 0!
-        //    Assert.AreEqual(0m, loadedInvoice.AllowanceTotalAmount); // mandatory, even if 0!
-        //    Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
-        //    Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
-        //    Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
-        //    Assert.AreEqual(null, loadedInvoice.TotalPrepaidAmount); // optional
-        //    Assert.AreEqual(529.87m, loadedInvoice.DuePayableAmount);
-
-        //    //InvoiceReferencedDocument
-        //    Assert.AreEqual("RE-12345", loadedInvoice.GetInvoiceReferencedDocuments().First().ID);
-        //    Assert.AreEqual(timestamp, loadedInvoice.GetInvoiceReferencedDocuments().First().IssueDateTime);
-
-
-        //    //Line items
-        //    var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
-        //    Assert.IsNotNull(loadedLineItem);
-        //    Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.AssociatedDocument.LineID));
-        //    Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
-
-        //    Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);
-
-        //    Assert.AreEqual("TB100A4", loadedLineItem.SellerAssignedID);
-        //    Assert.AreEqual("0815", loadedLineItem.BuyerAssignedID);
-        //    Assert.AreEqual(GlobalIDSchemeIdentifiers.EAN, loadedLineItem.GlobalID.SchemeID);
-        //    Assert.AreEqual("4012345001235", loadedLineItem.GlobalID.ID);
-
-        //    //GrossPriceProductTradePrice
-        //    Assert.AreEqual(9.9m, loadedLineItem.GrossUnitPrice);
-        //    Assert.AreEqual(QuantityCodes.H87, loadedLineItem.UnitCode);
-        //    Assert.AreEqual(3m, loadedLineItem.UnitQuantity);
-
-        //    //NetPriceProductTradePrice
-        //    Assert.AreEqual(9.9m, loadedLineItem.NetUnitPrice);
-        //    Assert.AreEqual(20m, loadedLineItem.BilledQuantity);
-
-        //    Assert.AreEqual(TaxTypes.VAT, loadedLineItem.TaxType);
-        //    Assert.AreEqual(TaxCategoryCodes.S, loadedLineItem.TaxCategoryCode);
-        //    Assert.AreEqual(19m, loadedLineItem.TaxPercent);
-
-        //    Assert.AreEqual("12345", loadedLineItem.BuyerOrderReferencedDocument.ID);
-        //    Assert.AreEqual(timestamp, loadedLineItem.BuyerOrderReferencedDocument.IssueDateTime);
-        //    Assert.AreEqual("12345", loadedLineItem.DeliveryNoteReferencedDocument.ID);
-        //    Assert.AreEqual(timestamp, loadedLineItem.DeliveryNoteReferencedDocument.IssueDateTime);
-        //    Assert.AreEqual("12345", loadedLineItem.ContractReferencedDocument.ID);
-        //    Assert.AreEqual(timestamp, loadedLineItem.ContractReferencedDocument.IssueDateTime);
-
-        //    var lineItemReferencedDoc = loadedLineItem.GetAdditionalReferencedDocuments().FirstOrDefault();
-        //    Assert.IsNotNull(lineItemReferencedDoc);
-        //    Assert.AreEqual("xyz", lineItemReferencedDoc.ID);
-        //    Assert.AreEqual(AdditionalReferencedDocumentTypeCode.ReferenceDocument, lineItemReferencedDoc.TypeCode);
-        //    Assert.AreEqual(timestamp, lineItemReferencedDoc.IssueDateTime);
-        //    Assert.AreEqual(ReferenceTypeCodes.AAB, lineItemReferencedDoc.ReferenceTypeCode);
-
-
-        //    var productCharacteristics = loadedLineItem.ApplicableProductCharacteristics.FirstOrDefault();
-        //    Assert.IsNotNull(productCharacteristics);
-        //    Assert.AreEqual("Product characteristics", productCharacteristics.Description);
-        //    Assert.AreEqual("Product value", productCharacteristics.Value);
-
-        //    Assert.AreEqual(timestamp, loadedLineItem.ActualDeliveryDate);
-        //    Assert.AreEqual(timestamp, loadedLineItem.BillingPeriodStart);
-        //    Assert.AreEqual(timestamp.AddDays(10), loadedLineItem.BillingPeriodEnd);
-
-        //    var accountingAccount = loadedLineItem.ReceivableSpecifiedTradeAccountingAccounts.FirstOrDefault();
-        //    Assert.IsNotNull(accountingAccount);
-        //    Assert.AreEqual("987654", accountingAccount.TradeAccountID);
-
-
-        //    var lineItemTradeAllowanceCharge = loadedLineItem.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason: UnitTest");
-        //    Assert.IsNotNull(lineItemTradeAllowanceCharge);
-        //    Assert.IsTrue(lineItemTradeAllowanceCharge.ChargeIndicator);
-        //    Assert.AreEqual(10m, lineItemTradeAllowanceCharge.BasisAmount);
-        //    Assert.AreEqual(50m, lineItemTradeAllowanceCharge.ActualAmount);
-        //    Assert.AreEqual("Reason: UnitTest", lineItemTradeAllowanceCharge.Reason);
-        //}
-
-        ///// <summary>
-        ///// This test ensure that BIC won't be written if empty
-        ///// </summary>
-        //[Fact]
-        //public void TestFinancialInstitutionBICEmpty()
-        //{
-        //    DateTime issueDateTime = DateTime.Today;
-
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    //PayeeSpecifiedCreditorFinancialInstitution
-        //    desc.CreditorBankAccounts[0].BIC = string.Empty;
-        //    //PayerSpecifiedDebtorFinancialInstitution
-        //    desc.AddDebitorFinancialAccount("DE02120300000000202051", string.Empty);
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var reader = new StreamReader(ms);
-        //    var text = reader.ReadToEnd();
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var doc = new XmlDocument();
-        //    doc.Load(ms);
-        //    var nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
-        //    nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-        //    nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-        //    nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
-        //    nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
-        //    nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
-
-        //    XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
-        //    XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
-
-        //    Assert.AreEqual(creditorFinancialInstitutions.Count, 0);
-        //    Assert.AreEqual(debitorFinancialInstitutions.Count, 0);
-        //} // !TestFinancialInstitutionBICEmpty()
-
-
-        ///// <summary>
-        ///// This test ensure that BIC won't be written if empty
-        ///// </summary>
-        //[Fact]
-        //public void TestAltteilSteuer()
-        //{
-        //    var desc = InvoiceDescriptor.CreateInvoice("112233", new DateTime(2021, 04, 23), CurrencyCodes.EUR);
-        //    desc.Notes.Clear();
-        //    desc.Notes.Add(new Note("Rechnung enthält 100 EUR (Umsatz)Steuer auf Altteile gem. Abschn. 10.5 Abs. 3 UStAE", SubjectCodes.ADU, ContentCodes.Unknown));
-
-        //    desc.TradeLineItems.Clear();
-        //    desc.AddTradeLineItem(name: "Neumotor",
-        //                          unitCode: QuantityCodes.C62,
-        //                          unitQuantity: 1,
-        //                          billedQuantity: 1,
-        //                          netUnitPrice: 1000,
-        //                          taxType: TaxTypes.VAT,
-        //                          categoryCode: TaxCategoryCodes.S,
-        //                          taxPercent: 19);
-
-        //    desc.AddTradeLineItem(name: "Bemessungsgrundlage und Umsatzsteuer auf Altteil",
-        //                          unitCode: QuantityCodes.C62,
-        //                          unitQuantity: 1,
-        //                          billedQuantity: 1,
-        //                          netUnitPrice: 100,
-        //                          taxType: TaxTypes.VAT,
-        //                          categoryCode: TaxCategoryCodes.S,
-        //                          taxPercent: 19);
-
-        //    desc.AddTradeLineItem(name: "Korrektur/Stornierung Bemessungsgrundlage der Umsatzsteuer auf Altteil",
-        //                          unitCode: QuantityCodes.C62,
-        //                          unitQuantity: 1,
-        //                          billedQuantity: -1,
-        //                          netUnitPrice: 100,
-        //                          taxType: TaxTypes.VAT,
-        //                          categoryCode: TaxCategoryCodes.Z,
-        //                          taxPercent: 0);
-
-        //    desc.AddApplicableTradeTax(basisAmount: 1000,
-        //                               percent: 19,
-        //                               TaxTypes.VAT,
-        //                               TaxCategoryCodes.S);
-
-        //    desc.SetTotals(lineTotalAmount: 1500m,
-        //             taxBasisAmount: 1500m,
-        //             taxTotalAmount: 304m,
-        //             grandTotalAmount: 1804m,
-        //             duePayableAmount: 1804m
-        //            );
-
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-        //    ms.Seek(0, SeekOrigin.Begin);
-
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-        //    Assert.AreEqual(loadedInvoice.Invoicee, null);
-        //} // !TestAltteilSteuer()
-
-        //[Fact]
-        //public void TestBasisQuantityStandard()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-
-        //    desc.TradeLineItems.Clear();
-        //    desc.AddTradeLineItem(name: "Joghurt Banane",
-        //                          unitCode: QuantityCodes.H87,
-        //                          sellerAssignedID: "ARNR2",
-        //                          id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
-        //                          grossUnitPrice: 5.5m,
-        //                          netUnitPrice: 5.5m,
-        //                          billedQuantity: 50,
-        //                          taxType: TaxTypes.VAT,
-        //                          categoryCode: TaxCategoryCodes.S,
-        //                          taxPercent: 7
-        //                          );
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-        //    ms.Seek(0, SeekOrigin.Begin);
-
-        //    var doc = new XmlDocument();
-        //    doc.Load(ms);
-        //    var nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
-        //    nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-        //    nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-        //    nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
-        //    nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
-        //    nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
-
-        //    XmlNode node = doc.SelectSingleNode("//ram:SpecifiedTradeSettlementLineMonetarySummation//ram:LineTotalAmount", nsmgr);
-        //    Assert.AreEqual("275.00", node.InnerText);
-        //} // !TestBasisQuantityStandard()
-
-
-        //[Fact]
-        //public void TestBasisQuantityMultiple()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-
-        //    desc.TradeLineItems.Clear();
-        //    TradeLineItem tli = desc.AddTradeLineItem(name: "Joghurt Banane",
-        //                                              unitCode: QuantityCodes.H87,
-        //                                              sellerAssignedID: "ARNR2",
-        //                                              id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
-        //                                              grossUnitPrice: 5.5m,
-        //                                              netUnitPrice: 5.5m,
-        //                                              billedQuantity: 50,
-        //                                              taxType: TaxTypes.VAT,
-        //                                              categoryCode: TaxCategoryCodes.S,
-        //                                              taxPercent: 7,
-        //                                              unitQuantity: 10
-        //                                              );
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-        //    ms.Seek(0, SeekOrigin.Begin);
-
-        //    var doc = new XmlDocument();
-        //    doc.Load(ms);
-        //    var nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
-        //    nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-        //    nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-        //    nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
-        //    nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
-        //    nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
-
-        //    XmlNode node = doc.SelectSingleNode("//ram:SpecifiedTradeSettlementLineMonetarySummation//ram:LineTotalAmount", nsmgr);
-        //    Assert.AreEqual("27.50", node.InnerText);
-        //} // !TestBasisQuantityMultiple()
-
-
-        //[Fact]
-        //public void TestTradeAllowanceChargeWithoutExplicitPercentage()
-        //{
-        //    InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
-
-        //    // fake values, does not matter for our test case
-        //    invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, string.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
-
-        //    var ms = new MemoryStream();
-        //    invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Position = 0;
-
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-        //    IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
-
-        //    Assert.IsTrue(allowanceCharges.Count == 1);
-        //    Assert.AreEqual(allowanceCharges[0].BasisAmount, 100m);
-        //    Assert.AreEqual(allowanceCharges[0].Amount, 10m);
-        //    Assert.AreEqual(allowanceCharges[0].ChargePercentage, null);
-        //} // !TestTradeAllowanceChargeWithoutExplicitPercentage()
-
-
-        //[Fact]
-        //public void TestTradeAllowanceChargeWithExplicitPercentage()
-        //{
-        //    InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
-
-        //    // fake values, does not matter for our test case
-        //    invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, string.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
-
-        //    var ms = new MemoryStream();
-        //    invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Position = 0;
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-        //    IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
-
-        //    Assert.IsTrue(allowanceCharges.Count == 1);
-        //    Assert.AreEqual(allowanceCharges[0].BasisAmount, 100m);
-        //    Assert.AreEqual(allowanceCharges[0].Amount, 10m);
-        //    Assert.AreEqual(allowanceCharges[0].ChargePercentage, 12);
-        //} // !TestTradeAllowanceChargeWithExplicitPercentage()
-
-
-        //[Fact]
-        //public void TestReferenceXRechnung21UBL()
-        //{
-        //    var path = @"..\..\..\..\demodata\xRechnung\xRechnung UBL.xml";
-        //    path = _makeSurePathIsCrossPlatformCompatible(path);
-
-        //    var desc = InvoiceDescriptor.Load(path);
-
-        //    Assert.AreEqual(desc.Profile, Profile.XRechnung);
-        //    Assert.AreEqual(desc.Type, InvoiceType.Invoice);
-
-        //    Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
-        //    Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 6, 21));
-        //    Assert.AreEqual(desc.PaymentReference, "0815-99-1-a");
-        //    Assert.AreEqual(desc.OrderNo, "0815-99-1");
-        //    Assert.AreEqual(desc.Currency, CurrencyCodes.EUR);
-
-        //    Assert.AreEqual(desc.Buyer.Name, "Rechnungs Roulette GmbH & Co KG");
-        //    Assert.AreEqual(desc.Buyer.City, "Klein Schlappstadt a.d. Lusche");
-        //    Assert.AreEqual(desc.Buyer.Postcode, "12345");
-        //    Assert.AreEqual(desc.Buyer.Country, (CountryCodes)276);
-        //    Assert.AreEqual(desc.Buyer.Street, "Beispielgasse 17b");
-        //    Assert.AreEqual(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName, "Rechnungs Roulette GmbH & Co KG");
-
-        //    Assert.AreEqual(desc.BuyerContact.Name, "Manfred Mustermann");
-        //    Assert.AreEqual(desc.BuyerContact.EmailAddress, "manfred.mustermann@rr.de");
-        //    Assert.AreEqual(desc.BuyerContact.PhoneNo, "012345 98 765 - 44");
-
-        //    Assert.AreEqual(desc.Seller.Name, "Harry Hirsch Holz- und Trockenbau");
-        //    Assert.AreEqual(desc.Seller.City, "Klein Schlappstadt a.d. Lusche");
-        //    Assert.AreEqual(desc.Seller.Postcode, "12345");
-        //    Assert.AreEqual(desc.Seller.Country, (CountryCodes)276);
-        //    Assert.AreEqual(desc.Seller.Street, "Beispielgasse 17a");
-        //    Assert.AreEqual(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName, "Harry Hirsch Holz- und Trockenbau");
-
-        //    Assert.AreEqual(desc.SellerContact.Name, "Harry Hirsch");
-        //    Assert.AreEqual(desc.SellerContact.EmailAddress, "harry.hirsch@hhhtb.de");
-        //    Assert.AreEqual(desc.SellerContact.PhoneNo, "012345 78 657 - 8");
-
-        //    Assert.AreEqual(desc.TradeLineItems.Count, 2);
-
-        //    Assert.AreEqual(desc.TradeLineItems[0].SellerAssignedID, "0815");
-        //    Assert.AreEqual(desc.TradeLineItems[0].Name, "Leimbinder");
-        //    Assert.AreEqual(desc.TradeLineItems[0].Description, "Leimbinder 2x18m; Birke");
-        //    Assert.AreEqual(desc.TradeLineItems[0].BilledQuantity, 1);
-        //    Assert.AreEqual(desc.TradeLineItems[0].LineTotalAmount, 1245.98m);
-        //    Assert.AreEqual(desc.TradeLineItems[0].TaxPercent, 19);
-
-        //    Assert.AreEqual(desc.TradeLineItems[1].SellerAssignedID, "MON");
-        //    Assert.AreEqual(desc.TradeLineItems[1].Name, "Montage");
-        //    Assert.AreEqual(desc.TradeLineItems[1].Description, "Montage durch Fachpersonal");
-        //    Assert.AreEqual(desc.TradeLineItems[1].BilledQuantity, 1);
-        //    Assert.AreEqual(desc.TradeLineItems[1].LineTotalAmount, 200.00m);
-        //    Assert.AreEqual(desc.TradeLineItems[1].TaxPercent, 7);
-
-        //    Assert.AreEqual(desc.LineTotalAmount, 1445.98m);
-        //    Assert.AreEqual(desc.TaxTotalAmount, 250.74m);
-        //    Assert.AreEqual(desc.GrandTotalAmount, 1696.72m);
-        //    Assert.AreEqual(desc.DuePayableAmount, 1696.72m);
-
-        //    Assert.AreEqual(desc.Taxes[0].TaxAmount, 236.74m);
-        //    Assert.AreEqual(desc.Taxes[0].BasisAmount, 1245.98m);
-        //    Assert.AreEqual(desc.Taxes[0].Percent, 19);
-        //    Assert.AreEqual(desc.Taxes[0].TypeCode, TaxTypes.VAT);
-        //    Assert.AreEqual(desc.Taxes[0].CategoryCode, TaxCategoryCodes.S);
-
-        //    Assert.AreEqual(desc.Taxes[1].TaxAmount, 14.0000m);
-        //    Assert.AreEqual(desc.Taxes[1].BasisAmount, 200.00m);
-        //    Assert.AreEqual(desc.Taxes[1].Percent, 7);
-        //    Assert.AreEqual(desc.Taxes[1].TypeCode, TaxTypes.VAT);
-        //    Assert.AreEqual(desc.Taxes[1].CategoryCode, TaxCategoryCodes.S);
-
-        //    Assert.AreEqual(desc.GetTradePaymentTerms().FirstOrDefault().DueDate, new DateTime(2020, 6, 21));
-
-        //    Assert.AreEqual(desc.CreditorBankAccounts[0].IBAN, "DE12500105170648489890");
-        //    Assert.AreEqual(desc.CreditorBankAccounts[0].BIC, "INGDDEFFXXX");
-        //    Assert.AreEqual(desc.CreditorBankAccounts[0].Name, "Harry Hirsch");
-
-        //    Assert.AreEqual(desc.PaymentMeans.TypeCode, (PaymentMeansTypeCodes)30);
-        //} // !TestReferenceXRechnung21UBL()
-
-        //[Fact]
-        //public void TestWriteAndReadDespatchAdviceDocumentReferenceXRechnung()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    var despatchAdviceNo = "421567982";
-        //    var despatchAdviceDate = new DateTime(2024, 5, 14);
-        //    desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(despatchAdviceNo, loadedInvoice.DespatchAdviceReferencedDocument.ID);
-        //    Assert.AreEqual(despatchAdviceDate, loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime);
-        //} //!TestWriteAndReadDespatchAdviceDocumentReference
-
-        //[Fact]
-        //public void TestSpecifiedTradeAllowanceCharge()
-        //{
-        //    InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
-
-        //    invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
-
-        //    var ms = new MemoryStream();
-        //    invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Position = 0;
-
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-        //    TradeAllowanceCharge allowanceCharge = loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowanceCharges().First();
-
-        //    Assert.AreEqual(allowanceCharge.ChargeIndicator, false);//false = discount
-        //    //CurrencyCodes are not written bei InvoiceDescriptor22Writer
-        //    //Assert.AreEqual(allowanceCharge.Currency, CurrencyCodes.EUR);
-        //    Assert.AreEqual(allowanceCharge.BasisAmount, 198m);
-        //    Assert.AreEqual(allowanceCharge.ActualAmount, 19.8m);
-        //    Assert.AreEqual(allowanceCharge.ChargePercentage, 10m);
-        //    Assert.AreEqual(allowanceCharge.Reason, "Discount 10%");
-        //} // !SpecifiedTradeAllowanceCharge()
-
-
-        //[Fact]
-        //public void TestSellerDescription()
-        //{
-        //    InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
-
-        //    var description = "Test description";
-
-        //    invoice.SetSeller(name: "Lieferant GmbH",
-        //                      postcode: "80333",
-        //                      city: "München",
-        //                      street: "Lieferantenstraße 20",
-        //                      country: CountryCodes.DE,
-        //                      id: string.Empty,
-        //                      globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
-        //                      legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"),
-        //                      description: description
-        //                      );
-
-        //    var ms = new MemoryStream();
-        //    invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Position = 0;
-
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(loadedInvoice.Seller.Description, description);
-        //} // !TestSellerDescription()
-
-
-        //[Fact]
-        //public void TestSellerContact()
-        //{
-        //    InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
-
-        //    var description = "Test description";
-
-        //    invoice.SetSeller(name: "Lieferant GmbH",
-        //                      postcode: "80333",
-        //                      city: "München",
-        //                      street: "Lieferantenstraße 20",
-        //                      country: CountryCodes.DE,
-        //                      id: string.Empty,
-        //                      globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
-        //                      legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"),
-        //                      description: description
-        //                      );
-
-        //    var SELLER_CONTACT = "1-123";
-        //    var ORG_UNIT = "2-123";
-        //    var EMAIL_ADDRESS = "3-123";
-        //    var PHONE_NO = "4-123";
-        //    var FAX_NO = "5-123";
-        //    invoice.SetSellerContact(SELLER_CONTACT, ORG_UNIT, EMAIL_ADDRESS, PHONE_NO, FAX_NO);
-
-        //    var ms = new MemoryStream();
-        //    invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-        //    ms.Position = 0;
-
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(SELLER_CONTACT, loadedInvoice.SellerContact.Name);
-        //    Assert.AreEqual(ORG_UNIT, loadedInvoice.SellerContact.OrgUnit);
-        //    Assert.AreEqual(EMAIL_ADDRESS, loadedInvoice.SellerContact.EmailAddress);
-        //    Assert.AreEqual(PHONE_NO, loadedInvoice.SellerContact.PhoneNo);
-        //    Assert.AreEqual(FAX_NO, loadedInvoice.SellerContact.FaxNo);
-
-        //    Assert.AreEqual(loadedInvoice.Seller.Description, description);
-        //} // !TestSellerContact()
-
-        //[Fact]
-        //public void ShouldLoadCiiWithoutQdtNamespace()
-        //{
-        //    var path = @"..\..\..\..\demodata\xRechnung\xRechnung CII - without qdt.xml";
-        //    path = _makeSurePathIsCrossPlatformCompatible(path);
-
-        //    var desc = InvoiceDescriptor.Load(path);
-
-        //    Assert.AreEqual(desc.Profile, Profile.XRechnung);
-        //    Assert.AreEqual(desc.Type, InvoiceType.Invoice);
-        //    Assert.AreEqual(desc.InvoiceNo, "123456XX");
-        //    Assert.AreEqual(desc.TradeLineItems.Count, 2);
-        //    Assert.AreEqual(desc.LineTotalAmount, 314.86m);
-        //} // !ShouldLoadCIIWithoutQdtNamespace()
-
-
-        //[Fact]
-        //public void TestDesignatedProductClassificationWithFullClassification()
-        //{
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    desc.TradeLineItems.First().AddDesignatedProductClassification(
-        //        DesignatedProductClassificationClassCodes.HS,
-        //        "List Version ID Value",
-        //        "Class Code",
-        //        "Class Name");
-
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-
-        //    // string comparison
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var reader = new StreamReader(ms);
-        //    var content = reader.ReadToEnd();
-        //    Assert.IsTrue(content.Contains("<ram:DesignatedProductClassification>"));
-        //    Assert.IsTrue(content.Contains("<ram:ClassCode listID=\"HS\" listVersionID=\"List Version ID Value\">Class Code</ram:ClassCode>"));
-        //    Assert.IsTrue(content.Contains("<ram:ClassName>Class Name</ram:ClassName>"));
-
-        //    // structure comparison
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-        //    Assert.AreEqual("List Version ID Value", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-        //    Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-        //    Assert.AreEqual("Class Name", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-        //} // !TestDesignatedProductClassificationWithFullClassification()
-
-
-        //[Fact]
-        //public void TestDesignatedProductClassificationWithEmptyVersionId()
-        //{
-        //    // test with empty version id value
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    desc.TradeLineItems.First().AddDesignatedProductClassification(
-        //        DesignatedProductClassificationClassCodes.HS,
-        //        null,
-        //        "Class Code",
-        //        "Class Name"
-        //        );
-
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-        //    Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-        //    Assert.AreEqual("Class Code", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-        //    Assert.AreEqual("Class Name", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-        //} // !TestDesignatedProductClassificationWithEmptyVersionId()
-
-
-
-        //[Fact]
-        //public void TestDesignatedProductClassificationWithEmptyListIdAndVersionId()
-        //{
-        //    // test with empty version id value
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    desc.TradeLineItems.First().AddDesignatedProductClassification(
-        //        DesignatedProductClassificationClassCodes.HS,
-        //        null,
-        //        "Class Code"
-        //        );
-
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    var x = loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First();
-
-
-        //    Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-        //    Assert.AreEqual(string.Empty, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-        //    Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-        //    Assert.AreEqual(string.Empty, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-        //} // !TestDesignatedProductClassificationWithEmptyListIdAndVersionId()
-
-
-        //[Fact]
-        //public void TestDesignatedProductClassificationWithoutAnyOptionalInformation()
-        //{
-        //    // test with empty version id value
-        //    InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
-        //    desc.TradeLineItems.First().AddDesignatedProductClassification(DesignatedProductClassificationClassCodes.HS);
-
-        //    var ms = new MemoryStream();
-
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-        //    Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-        //    Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-        //    Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-        //} // !TestDesignatedProductClassificationWithoutAnyOptionalInformation()
-
-
-        //[Fact]
-        //public void TestPaymentTermsMultiCardinality()
-        //{
-        //    // Arrange
-        //    DateTime timestamp = DateTime.Now.Date;
-        //    var desc = InvoiceProvider.CreateInvoice();
-        //    desc.GetTradePaymentTerms().Clear();
-        //    desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
-        //    desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
-        //    desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var reader = new StreamReader(ms);
-        //    var text = reader.ReadToEnd();
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
-
-        //    // Act
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    // Assert
-        //    // PaymentTerms
-        //    var paymentTerms = loadedInvoice.GetTradePaymentTerms();
-        //    Assert.IsNotNull(paymentTerms);
-        //    Assert.AreEqual(2, paymentTerms.Count);
-        //    var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
-        //    Assert.IsNotNull(paymentTerm);
-        //    Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
-        //    Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
-
-        //    paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Skonto);
-        //    Assert.IsNotNull(paymentTerm);
-        //    Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
-        //    // Assert.AreEqual(10, paymentTerm.DueDays);
-        //    Assert.AreEqual(3m, paymentTerm.Percentage);
-        //} // !TestPaymentTermsMultiCardinality()
-
-
-        //[Fact]
-        //public void TestPaymentTermsSingleCardinality()
-        //{
-        //    // Arrange
-        //    DateTime timestamp = DateTime.Now.Date;
-        //    var desc = InvoiceProvider.CreateInvoice();
-        //    desc.GetTradePaymentTerms().Clear();
-        //    desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
-        //    desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), percentage: 3m);
-        //    desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var reader = new StreamReader(ms);
-        //    var text = reader.ReadToEnd();
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
-
-        //    // Act
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    // Assert
-        //    // PaymentTerms
-        //    var paymentTerms = loadedInvoice.GetTradePaymentTerms();
-        //    Assert.IsNotNull(paymentTerms);
-        //    Assert.AreEqual(1, paymentTerms.Count);
-        //    var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
-        //    Assert.IsNotNull(paymentTerm);
-        //    Assert.AreEqual($"Zahlbar innerhalb 30 Tagen netto bis 04.04.2018{Environment.NewLine}3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
-        //    Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
-        //} // !TestPaymentTermsSingleCardinality()
-
-
-        //[Fact]
-        //public void TestPaymentTermsSingleCardinalityStructured()
-        //{
-        //    DateTime timestamp = DateTime.Now.Date;
-        //    var desc = InvoiceProvider.CreateInvoice();
-        //    desc.GetTradePaymentTerms().Clear();
-        //    desc.AddTradePaymentTerms(string.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
-        //    desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);
-        //    desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
-
-        //    var ms = new MemoryStream();
-        //    desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var reader = new StreamReader(ms);
-        //    var text = reader.ReadToEnd();
-
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
-
-        //    // Act
-        //    ms.Seek(0, SeekOrigin.Begin);
-        //    var loadedInvoice = InvoiceDescriptor.Load(ms);
-
-        //    // Assert
-        //    // PaymentTerms
-        //    var paymentTerms = loadedInvoice.GetTradePaymentTerms();
-        //    Assert.IsNotNull(paymentTerms);
-        //    Assert.AreEqual(1, paymentTerms.Count);
-        //    var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
-        //    Assert.IsNotNull(paymentTerm);
-        //    Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{XmlConstants.XmlNewLine}Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
-        //    Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
-        //    //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
-        //    //Assert.AreEqual(10, paymentTerm.DueDays);
-        //    //Assert.AreEqual(3m, paymentTerm.Percentage);
-        //} // !TestPaymentTermsSingleCardinalityStructured()
-
-        //[Fact]
-        //public void TestBuyerOrderReferenceLineId()
-        //{
-        //    var path = @"..\..\..\..\demodata\zugferd22\zugferd_2p2_EXTENDED_Fremdwaehrung-factur-x.xml";
-        //    path = _makeSurePathIsCrossPlatformCompatible(path);
-
-        //    Stream s = File.Open(path, FileMode.Open);
-        //    var desc = InvoiceDescriptor.Load(s);
-        //    s.Close();
-
-        //    Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "1");
-        //    Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.ID, "ORDER84359");
-        //}
-
-        //[Fact]
-        //public void TestRequiredDirectDebitFieldsShouldExist()
-        //{
-        //    var d = new InvoiceDescriptor();
-        //    d.Type = InvoiceType.Invoice;
-        //    d.InvoiceNo = "471102";
-        //    d.Currency = CurrencyCodes.EUR;
-        //    d.InvoiceDate = new DateTime(2018, 3, 5);
-        //    d.AddTradeLineItem(
-        //        lineID: "1",
-        //        id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
-        //        sellerAssignedID: "TB100A4",
-        //        name: "Trennblätter A4",
-        //        billedQuantity: 20m,
-        //        unitCode: QuantityCodes.H87,
-        //        netUnitPrice: 9.9m,
-        //        grossUnitPrice: 11.781m,
-        //        categoryCode: TaxCategoryCodes.S,
-        //        taxPercent: 19.0m,
-        //        taxType: TaxTypes.VAT);
-        //    d.SetSeller(
-        //        id: null,
-        //        globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
-        //        name: "Lieferant GmbH",
-        //        postcode: "80333",
-        //        city: "München",
-        //        street: "Lieferantenstraße 20",
-        //        country: CountryCodes.DE,
-        //        legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
-        //    d.SetBuyer(
-        //        id: "GE2020211",
-        //        globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
-        //        name: "Kunden AG Mitte",
-        //        postcode: "69876",
-        //        city: "Frankfurt",
-        //        street: "Kundenstraße 15",
-        //        country: CountryCodes.DE);
-        //    d.SetPaymentMeansSepaDirectDebit(
-        //        "DE98ZZZ09999999999",
-        //        "REF A-123");
-        //    d.AddDebitorFinancialAccount(
-        //        "DE21860000000086001055",
-        //        null);
-        //    d.AddTradePaymentTerms(
-        //        "Der Betrag in Höhe von EUR 235,62 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
-        //    d.SetTotals(
-        //        198.00m,
-        //        0.00m,
-        //        0.00m,
-        //        198.00m,
-        //        37.62m,
-        //        235.62m,
-        //        0.00m,
-        //        235.62m);
-        //    d.SellerTaxRegistration.Add(
-        //        new TaxRegistration
-        //        {
-        //            SchemeID = TaxRegistrationSchemeID.FC,
-        //            No = "201/113/40209"
-        //        });
-        //    d.SellerTaxRegistration.Add(
-        //        new TaxRegistration
-        //        {
-        //            SchemeID = TaxRegistrationSchemeID.VA,
-        //            No = "DE123456789"
-        //        });
-        //    d.AddApplicableTradeTax(
-        //        198.00m,
-        //        19.00m,
-        //        TaxTypes.VAT,
-        //        TaxCategoryCodes.S);
-
-        //    using (var stream = new MemoryStream())
-        //    {
-        //        d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
-        //        stream.Seek(0, SeekOrigin.Begin);
-
-        //        // test the raw xml file
-        //        var content = Encoding.UTF8.GetString(stream.ToArray());
-
-        //        Assert.IsTrue(content.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>"));
-        //        Assert.IsTrue(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
-        //    }
-        //} // !TestRequiredDirectDebitFieldsShouldExist()
-
-        //[Fact]
-        //public void TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
-        //{
-        //    var d = new InvoiceDescriptor();
-        //    d.Type = InvoiceType.Invoice;
-        //    d.InvoiceNo = "471102";
-        //    d.Currency = CurrencyCodes.EUR;
-        //    d.InvoiceDate = new DateTime(2018, 3, 5);
-        //    d.AddTradeLineItem(
-        //        lineID: "1",
-        //        id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
-        //        sellerAssignedID: "TB100A4",
-        //        name: "Trennblätter A4",
-        //        billedQuantity: 20m,
-        //        unitCode: QuantityCodes.H87,
-        //        netUnitPrice: 9.9m,
-        //        grossUnitPrice: 11.781m,
-        //        categoryCode: TaxCategoryCodes.S,
-        //        taxPercent: 19.0m,
-        //        taxType: TaxTypes.VAT);
-        //    d.SetSeller(
-        //        id: null,
-        //        globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
-        //        name: "Lieferant GmbH",
-        //        postcode: "80333",
-        //        city: "München",
-        //        street: "Lieferantenstraße 20",
-        //        country: CountryCodes.DE,
-        //        legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
-        //    d.SetBuyer(
-        //        id: "GE2020211",
-        //        globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
-        //        name: "Kunden AG Mitte",
-        //        postcode: "69876",
-        //        city: "Frankfurt",
-        //        street: "Kundenstraße 15",
-        //        country: CountryCodes.DE);
-        //    d.SetPaymentMeans(PaymentMeansTypeCodes.SEPACreditTransfer,
-        //        "Information of Payment Means",
-        //        "DE98ZZZ09999999999",
-        //        "REF A-123");
-        //    d.AddDebitorFinancialAccount(
-        //        "DE21860000000086001055",
-        //        null);
-        //    d.AddTradePaymentTerms(
-        //        "Der Betrag in Höhe von EUR 235,62 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
-        //    d.SetTotals(
-        //        198.00m,
-        //        0.00m,
-        //        0.00m,
-        //        198.00m,
-        //        37.62m,
-        //        235.62m,
-        //        0.00m,
-        //        235.62m);
-        //    d.SellerTaxRegistration.Add(
-        //        new TaxRegistration
-        //        {
-        //            SchemeID = TaxRegistrationSchemeID.FC,
-        //            No = "201/113/40209"
-        //        });
-        //    d.SellerTaxRegistration.Add(
-        //        new TaxRegistration
-        //        {
-        //            SchemeID = TaxRegistrationSchemeID.VA,
-        //            No = "DE123456789"
-        //        });
-        //    d.AddApplicableTradeTax(
-        //        198.00m,
-        //        19.00m,
-        //        TaxTypes.VAT,
-        //        TaxCategoryCodes.S);
-
-        //    using (var stream = new MemoryStream())
-        //    {
-        //        d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
-        //        stream.Seek(0, SeekOrigin.Begin);
-
-        //        // test the raw xml file
-        //        var content = Encoding.UTF8.GetString(stream.ToArray());
-
-        //        Assert.IsFalse(content.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>"));
-        //        Assert.IsFalse(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
-        //    }
-        //} // !TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
+        }
+
+        [Theory]
+        [InlineData(Profile.Minimum)]
+        [InlineData(Profile.Basic)]
+        [InlineData(Profile.BasicWL)]
+        [InlineData(Profile.Comfort)]
+        [InlineData(Profile.Extended, false)]
+        public void TestUltimateShipToTradePartyOnItemLevel(Profile profile, bool nullResult = true)
+        {
+            Party expected = new()
+            {
+                Name = "ShipTo",
+                City = "ShipToCity"
+            };
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().UltimateShipTo = expected;
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.TradeLineItems.Should().NotBeEmpty();
+            if (nullResult)
+                loadedInvoice.TradeLineItems.First().UltimateShipTo.Should().BeNull();
+            else
+                loadedInvoice.TradeLineItems.First().UltimateShipTo
+                    .Should().BeEquivalentTo(expected, options => options.Including(x => x.Name).Including(x => x.City));
+        }
+
+        [Fact]
+        public void TestEmbeddedAttachmentMimeType()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            var filename1 = "myrandomdata.pdf";
+            var filename2 = "myrandomdata.bin";
+            DateTime timestamp = DateTime.Now.Date;
+            var data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-PDF",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                issueDateTime: timestamp,
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename1);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-BIN",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                issueDateTime: timestamp.AddDays(-2),
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename2);
+
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.AdditionalReferencedDocuments.Should().HaveCount(2);
+
+            foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
+            {
+                if (document.ID == "My-File-PDF")
+                {
+                    document.Filename.Should().Be(filename1);
+                    document.MimeType.Should().Be("application/pdf");
+                    document.IssueDateTime.Should().Be(timestamp);
+                }
+
+                if (document.ID == "My-File-BIN")
+                {
+                    document.Filename.Should().Be(filename2);
+                    document.MimeType.Should().Be("application/octet-stream");
+                    document.IssueDateTime.Should().Be(timestamp.AddDays(-2));
+                }
+            }
+        }
+
+        [Fact]
+        public void TestOrderInformation()
+        {
+            var path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            DateTime timestamp = DateTime.Now.Date;
+
+            Stream s = File.Open(path, FileMode.Open);
+            var desc = InvoiceDescriptor.Load(s);
+            desc.OrderDate = timestamp;
+            desc.OrderNo = "12345";
+            s.Close();
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            loadedInvoice.OrderDate.Should().Be(timestamp);
+            loadedInvoice.OrderNo.Should().Be("12345");
+        }
+
+        [Fact]
+        public void TestSellerOrderReferencedDocument()
+        {
+            var uuid = Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.Profile.Should().Be(Profile.Extended);
+            loadedInvoice.SellerOrderReferencedDocument.ID.Should().Be(uuid);
+            loadedInvoice.SellerOrderReferencedDocument.IssueDateTime.Should().Be(issueDateTime);
+        }
+
+        [Fact]
+        public void TestWriteAndReadBusinessProcess()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            desc.BusinessProcess = "A1";
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.BusinessProcess.Should().Be("A1");
+        }
+
+        /// <summary>
+        /// This test ensure that Writer and Reader uses the same path and namespace for elements
+        /// </summary>
+        [Fact]
+        public void TestWriteAndReadExtended()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            var filename2 = "myrandomdata.bin";
+            DateTime timestamp = DateTime.Now.Date;
+            var data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-BIN",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                issueDateTime: timestamp.AddDays(-2),
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename2);
+
+            desc.OrderNo = "12345";
+            desc.OrderDate = timestamp;
+
+            desc.SetContractReferencedDocument("12345", timestamp);
+
+            desc.SpecifiedProcuringProject = new SpecifiedProcuringProject { ID = "123", Name = "Project 123" };
+
+            desc.ShipTo = new Party
+            {
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
+                Name = "Ship To",
+                ContactName = "Max Mustermann",
+                Street = "Münchnerstr. 55",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Country = CountryCodes.DE
+            };
+
+            desc.UltimateShipTo = new Party
+            {
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
+                Name = "Ultimate Ship To",
+                ContactName = "Max Mustermann",
+                Street = "Münchnerstr. 55",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Country = CountryCodes.DE
+            };
+
+            desc.ShipFrom = new Party
+            {
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
+                Name = "Ship From",
+                ContactName = "Eva Musterfrau",
+                Street = "Alpenweg 5",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Country = CountryCodes.DE
+            };
+
+            desc.PaymentMeans.SEPACreditorIdentifier = "SepaID";
+            desc.PaymentMeans.SEPAMandateReference = "SepaMandat";
+            desc.PaymentMeans.FinancialCard = new FinancialCard { Id = "123", CardholderName = "Mustermann" };
+
+            desc.PaymentReference = "PaymentReference";
+
+            desc.Invoicee = new Party()
+            {
+                Name = "Test",
+                ContactName = "Max Mustermann",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Street = "Münchnerstraße 123",
+                AddressLine3 = "EG links",
+                CountrySubdivisionName = "Bayern",
+                Country = CountryCodes.DE
+            };
+
+            desc.Payee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
+            {
+                Name = "Test",
+                ContactName = "Max Mustermann",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Street = "Münchnerstraße 123",
+                AddressLine3 = "EG links",
+                CountrySubdivisionName = "Bayern",
+                Country = CountryCodes.DE
+            };
+
+            desc.AddDebitorFinancialAccount(iban: "DE02120300000000202052", bic: "BYLADEM1001", bankName: "Musterbank");
+            desc.BillingPeriodStart = timestamp;
+            desc.BillingPeriodEnd = timestamp.AddDays(14);
+
+            desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m);
+            desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
+
+            desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
+            desc.AddInvoiceReferencedDocument("RE-12345", timestamp);
+
+            //set additional LineItem data
+            var lineItem = desc.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
+            lineItem.Should().NotBeNull();
+            lineItem.Description = "This is line item TB100A4";
+            lineItem.BuyerAssignedID = "0815";
+            lineItem.SetOrderReferencedDocument("12345", timestamp);
+            lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp);
+            lineItem.SetContractReferencedDocument("12345", timestamp);
+
+            lineItem.AddAdditionalReferencedDocument("xyz", AdditionalReferencedDocumentTypeCode.ReferenceDocument, ReferenceTypeCodes.AAB, timestamp);
+
+            lineItem.UnitQuantity = 3m;
+            lineItem.ActualDeliveryDate = timestamp;
+
+            lineItem.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic
+            {
+                Description = "Product characteristics",
+                Value = "Product value"
+            });
+
+            lineItem.BillingPeriodStart = timestamp;
+            lineItem.BillingPeriodEnd = timestamp.AddDays(10);
+
+            lineItem.AddReceivableSpecifiedTradeAccountingAccount("987654");
+            lineItem.AddTradeAllowanceCharge(false, CurrencyCodes.EUR, 10m, 50m, "Reason: UnitTest");
+
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor.GetVersion(ms).Should().Be(ZUGFeRDVersion.Version23);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.InvoiceNo.Should().Be("471102");
+            loadedInvoice.InvoiceDate.Should().Be(new DateTime(2018, 03, 05));
+            loadedInvoice.Currency.Should().Be(CurrencyCodes.EUR);
+            loadedInvoice.Notes.Should().ContainSingle(n => n.Content == "Rechnung gemäß Bestellung vom 01.03.2018.");
+            loadedInvoice.ReferenceOrderNo.Should().Be("04011000-12345-34");
+
+            loadedInvoice.Seller.Name.Should().Be("Lieferant GmbH");
+            loadedInvoice.Seller.Postcode.Should().Be("80333");
+            loadedInvoice.Seller.City.Should().Be("München");
+            loadedInvoice.Seller.Street.Should().Be("Lieferantenstraße 20");
+            loadedInvoice.Seller.Country.Should().Be(CountryCodes.DE);
+            loadedInvoice.Seller.GlobalID.SchemeID.Should().Be(GlobalIDSchemeIdentifiers.GLN);
+            loadedInvoice.Seller.GlobalID.ID.Should().Be("4000001123452");
+            loadedInvoice.SellerContact.Name.Should().Be("Max Mustermann");
+            loadedInvoice.SellerContact.OrgUnit.Should().Be("Muster-Einkauf");
+            loadedInvoice.SellerContact.EmailAddress.Should().Be("Max@Mustermann.de");
+            loadedInvoice.SellerContact.PhoneNo.Should().Be("+49891234567");
+
+            loadedInvoice.Buyer.Name.Should().Be("Kunden AG Mitte");
+            loadedInvoice.Buyer.Postcode.Should().Be("69876");
+            loadedInvoice.Buyer.City.Should().Be("Frankfurt");
+            loadedInvoice.Buyer.Street.Should().Be("Kundenstraße 15");
+            loadedInvoice.Buyer.Country.Should().Be(CountryCodes.DE);
+            loadedInvoice.Buyer.ID.ID.Should().Be("GE2020211");
+
+            loadedInvoice.OrderNo.Should().Be("12345");
+            loadedInvoice.OrderDate.Should().Be(timestamp);
+
+            loadedInvoice.ContractReferencedDocument.ID.Should().Be("12345");
+            loadedInvoice.ContractReferencedDocument.IssueDateTime.Should().Be(timestamp);
+
+            loadedInvoice.SpecifiedProcuringProject.ID.Should().Be("123");
+            loadedInvoice.SpecifiedProcuringProject.Name.Should().Be("Project 123");
+
+            loadedInvoice.UltimateShipTo.Name.Should().Be("Ultimate Ship To");
+            /** 
+             * @todo we can add further asserts for the remainder of properties 
+            */
+
+            loadedInvoice.ShipTo.ID.ID.Should().Be("123");
+            loadedInvoice.ShipTo.GlobalID.SchemeID.Should().Be(GlobalIDSchemeIdentifiers.DUNS);
+            loadedInvoice.ShipTo.GlobalID.ID.Should().Be("789");
+            loadedInvoice.ShipTo.Name.Should().Be("Ship To");
+            loadedInvoice.ShipTo.ContactName.Should().Be("Max Mustermann");
+            loadedInvoice.ShipTo.Street.Should().Be("Münchnerstr. 55");
+            loadedInvoice.ShipTo.Postcode.Should().Be("83022");
+            loadedInvoice.ShipTo.City.Should().Be("Rosenheim");
+            loadedInvoice.ShipTo.Country.Should().Be(CountryCodes.DE);
+
+            loadedInvoice.ShipFrom.ID.ID.Should().Be("123");
+            loadedInvoice.ShipFrom.GlobalID.SchemeID.Should().Be(GlobalIDSchemeIdentifiers.DUNS);
+            loadedInvoice.ShipFrom.GlobalID.ID.Should().Be("789");
+            loadedInvoice.ShipFrom.Name.Should().Be("Ship From");
+            loadedInvoice.ShipFrom.ContactName.Should().Be("Eva Musterfrau");
+            loadedInvoice.ShipFrom.Street.Should().Be("Alpenweg 5");
+            loadedInvoice.ShipFrom.Postcode.Should().Be("83022");
+            loadedInvoice.ShipFrom.City.Should().Be("Rosenheim");
+            loadedInvoice.ShipFrom.Country.Should().Be(CountryCodes.DE);
+
+            loadedInvoice.ActualDeliveryDate.Should().Be(new DateTime(2018, 03, 05));
+            loadedInvoice.PaymentMeans.TypeCode.Should().Be(PaymentMeansTypeCodes.SEPACreditTransfer);
+            loadedInvoice.PaymentMeans.Information.Should().Be("Zahlung per SEPA Überweisung.");
+
+            loadedInvoice.PaymentReference.Should().Be("PaymentReference");
+
+            loadedInvoice.PaymentMeans.SEPACreditorIdentifier.Should().BeEmpty();
+            loadedInvoice.PaymentMeans.SEPAMandateReference.Should().Be("SepaMandat");
+            loadedInvoice.PaymentMeans.FinancialCard.Id.Should().Be("123");
+            loadedInvoice.PaymentMeans.FinancialCard.CardholderName.Should().Be("Mustermann");
+
+            var bankAccount = loadedInvoice.CreditorBankAccounts.FirstOrDefault(a => a.IBAN == "DE02120300000000202051");
+            bankAccount.Should().NotBeNull();
+            bankAccount!.Name.Should().Be("Kunden AG");
+            bankAccount!.IBAN.Should().Be("DE02120300000000202051");
+            bankAccount!.BIC.Should().Be("BYLADEM1001");
+
+            var debitorBankAccount = loadedInvoice.DebitorBankAccounts.FirstOrDefault(a => a.IBAN == "DE02120300000000202052");
+            debitorBankAccount.Should().NotBeNull();
+            debitorBankAccount!.IBAN.Should().Be("DE02120300000000202052");
+
+            loadedInvoice.Invoicee.Name.Should().Be("Test");
+            loadedInvoice.Invoicee.ContactName.Should().Be("Max Mustermann");
+            loadedInvoice.Invoicee.Postcode.Should().Be("83022");
+            loadedInvoice.Invoicee.City.Should().Be("Rosenheim");
+            loadedInvoice.Invoicee.Street.Should().Be("Münchnerstraße 123");
+            loadedInvoice.Invoicee.AddressLine3.Should().Be("EG links");
+            loadedInvoice.Invoicee.CountrySubdivisionName.Should().Be("Bayern");
+            loadedInvoice.Invoicee.Country.Should().Be(CountryCodes.DE);
+
+            loadedInvoice.Payee.Name.Should().Be("Test");
+            loadedInvoice.Payee.ContactName.Should().Be("Max Mustermann");
+            loadedInvoice.Payee.Postcode.Should().Be("83022");
+            loadedInvoice.Payee.City.Should().Be("Rosenheim");
+            loadedInvoice.Payee.Street.Should().Be("Münchnerstraße 123");
+            loadedInvoice.Payee.AddressLine3.Should().Be("EG links");
+            loadedInvoice.Payee.CountrySubdivisionName.Should().Be("Bayern");
+            loadedInvoice.Payee.Country.Should().Be(CountryCodes.DE);
+
+            var tax = loadedInvoice.Taxes.FirstOrDefault(t => t.BasisAmount == 275m);
+            tax.Should().NotBeNull();
+            tax!.BasisAmount.Should().Be(275m);
+            tax.Percent.Should().Be(7m);
+            tax.TypeCode.Should().Be(TaxTypes.VAT);
+            tax.CategoryCode.Should().Be(TaxCategoryCodes.S);
+
+            loadedInvoice.BillingPeriodStart.Should().Be(timestamp);
+            loadedInvoice.BillingPeriodEnd.Should().Be(timestamp.AddDays(14));
+
+            //TradeAllowanceCharges
+            var tradeAllowanceCharge = loadedInvoice.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason for charge");
+            tradeAllowanceCharge.Should().NotBeNull();
+            tradeAllowanceCharge!.ChargeIndicator.Should().BeTrue();
+            tradeAllowanceCharge.Reason.Should().Be("Reason for charge");
+            tradeAllowanceCharge.BasisAmount.Should().Be(5m);
+            tradeAllowanceCharge.ActualAmount.Should().Be(15m);
+            tradeAllowanceCharge.Currency.Should().Be(CurrencyCodes.EUR);
+            tradeAllowanceCharge.Tax.Percent.Should().Be(19m);
+            tradeAllowanceCharge.Tax.TypeCode.Should().Be(TaxTypes.AAB);
+            tradeAllowanceCharge.Tax.CategoryCode.Should().Be(TaxCategoryCodes.AB);
+
+            //ServiceCharges
+            var serviceCharge = desc.ServiceCharges.FirstOrDefault(i => i.Description == "Logistics service charge");
+            serviceCharge.Should().NotBeNull();
+            serviceCharge!.Description.Should().Be("Logistics service charge");
+            serviceCharge.Amount.Should().Be(10m);
+            serviceCharge.Tax.Percent.Should().Be(7m);
+            serviceCharge.Tax.TypeCode.Should().Be(TaxTypes.AAC);
+            serviceCharge.Tax.CategoryCode.Should().Be(TaxCategoryCodes.AC);
+
+            //PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            paymentTerms.Should().NotBeNull();
+            paymentTerms!.Description.Should().Be("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018");
+            paymentTerms.DueDate.Should().Be(timestamp.AddDays(14));
+
+            loadedInvoice.LineTotalAmount.Should().Be(473.0m);
+            loadedInvoice.ChargeTotalAmount.Should().Be(0m);// mandatory, even if 0!
+            loadedInvoice.AllowanceTotalAmount.Should().Be(0m);// mandatory, even if 0!
+            loadedInvoice.TaxBasisAmount.Should().Be(473.0m);
+            loadedInvoice.TaxTotalAmount.Should().Be(56.87m);
+            loadedInvoice.GrandTotalAmount.Should().Be(529.87m);
+            loadedInvoice.TotalPrepaidAmount.Should().BeNull();// optional
+            loadedInvoice.DuePayableAmount.Should().Be(529.87m);
+
+            //InvoiceReferencedDocument
+            loadedInvoice.GetInvoiceReferencedDocuments().First().ID.Should().Be("RE-12345");
+            loadedInvoice.GetInvoiceReferencedDocuments().First().IssueDateTime.Should().Be(timestamp);
+
+            //Line items
+            var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
+            loadedLineItem.Should().NotBeNull();
+            loadedLineItem.AssociatedDocument.LineID.Should().NotBeNullOrEmpty();
+            loadedLineItem!.Description.Should().Be("This is line item TB100A4");
+            loadedLineItem.Name.Should().Be("Trennblätter A4");
+            loadedLineItem.SellerAssignedID.Should().Be("TB100A4");
+            loadedLineItem.BuyerAssignedID.Should().Be("0815");
+            loadedLineItem.GlobalID.SchemeID.Should().Be(GlobalIDSchemeIdentifiers.EAN);
+            loadedLineItem.GlobalID.ID.Should().Be("4012345001235");
+            loadedLineItem.TaxType.Should().Be(TaxTypes.VAT);
+            loadedLineItem.TaxCategoryCode.Should().Be(TaxCategoryCodes.S);
+            loadedLineItem.TaxPercent.Should().Be(19m);
+            loadedLineItem.BuyerOrderReferencedDocument.ID.Should().Be("12345");
+            loadedLineItem.BuyerOrderReferencedDocument.IssueDateTime.Should().Be(timestamp);
+            loadedLineItem.DeliveryNoteReferencedDocument.ID.Should().Be("12345");
+            loadedLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Should().Be(timestamp);
+            loadedLineItem.ContractReferencedDocument.ID.Should().Be("12345");
+            loadedLineItem.ContractReferencedDocument.IssueDateTime.Should().Be(timestamp);
+            loadedLineItem.ActualDeliveryDate.Should().Be(timestamp);
+            loadedLineItem.BillingPeriodStart.Should().Be(timestamp);
+            loadedLineItem.BillingPeriodEnd.Should().Be(timestamp.AddDays(10));
+
+            //GrossPriceProductTradePrice
+            loadedLineItem.GrossUnitPrice.Should().Be(9.9m);
+            loadedLineItem.UnitCode.Should().Be(QuantityCodes.H87);
+            loadedLineItem.UnitQuantity.Should().Be(3m);
+
+            //NetPriceProductTradePrice
+            loadedLineItem.NetUnitPrice.Should().Be(9.9m);
+            loadedLineItem.BilledQuantity.Should().Be(20m);
+
+            var lineItemReferencedDoc = loadedLineItem.GetAdditionalReferencedDocuments().FirstOrDefault();
+            lineItemReferencedDoc.Should().NotBeNull();
+            lineItemReferencedDoc!.ID.Should().Be("xyz");
+            lineItemReferencedDoc.TypeCode.Should().Be(AdditionalReferencedDocumentTypeCode.ReferenceDocument);
+            lineItemReferencedDoc.IssueDateTime.Should().Be(timestamp);
+            lineItemReferencedDoc.ReferenceTypeCode.Should().Be(ReferenceTypeCodes.AAB);
+
+            var productCharacteristics = loadedLineItem.ApplicableProductCharacteristics.FirstOrDefault();
+            productCharacteristics.Should().NotBeNull();
+            productCharacteristics!.Description.Should().Be("Product characteristics");
+            productCharacteristics.Value.Should().Be("Product value");
+
+            var accountingAccount = loadedLineItem.ReceivableSpecifiedTradeAccountingAccounts.FirstOrDefault();
+            accountingAccount.Should().NotBeNull();
+            accountingAccount!.TradeAccountID.Should().Be("987654");
+
+            var lineItemTradeAllowanceCharge = loadedLineItem.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason: UnitTest");
+            lineItemTradeAllowanceCharge.Should().NotBeNull();
+            lineItemTradeAllowanceCharge!.ChargeIndicator.Should().BeTrue();
+            lineItemTradeAllowanceCharge.Reason.Should().Be("Reason: UnitTest");
+            lineItemTradeAllowanceCharge.BasisAmount.Should().Be(10m);
+            lineItemTradeAllowanceCharge.ActualAmount.Should().Be(50m);
+        }
+
+        /// <summary>
+        /// This test ensure that BIC won't be written if empty
+        /// </summary>
+        [Fact]
+        public void TestFinancialInstitutionBICEmpty()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            //PayeeSpecifiedCreditorFinancialInstitution
+            desc.CreditorBankAccounts[0].BIC = string.Empty;
+            //PayerSpecifiedDebtorFinancialInstitution
+            desc.AddDebitorFinancialAccount("DE02120300000000202051", string.Empty);
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var doc = new XmlDocument();
+            doc.Load(ms);
+            var nsmgr = new XmlNamespaceManager(doc.DocumentElement!.OwnerDocument.NameTable);
+            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+
+            XmlNodeList? creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
+            XmlNodeList? debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
+
+            creditorFinancialInstitutions?.Count.Should().Be(0);
+            debitorFinancialInstitutions?.Count.Should().Be(0);
+        }
+
+        /// <summary>
+        /// This test ensure that BIC won't be written if empty
+        /// </summary>
+        [Fact]
+        public void TestAltteilSteuer()
+        {
+            var desc = InvoiceDescriptor.CreateInvoice("112233", new DateTime(2021, 04, 23), CurrencyCodes.EUR);
+            desc.Notes.Clear();
+            desc.Notes.Add(new Note("Rechnung enthält 100 EUR (Umsatz)Steuer auf Altteile gem. Abschn. 10.5 Abs. 3 UStAE", SubjectCodes.ADU, ContentCodes.Unknown));
+
+            desc.TradeLineItems.Clear();
+            desc.AddTradeLineItem(name: "Neumotor",
+                                  unitCode: QuantityCodes.C62,
+                                  unitQuantity: 1,
+                                  billedQuantity: 1,
+                                  netUnitPrice: 1000,
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
+                                  taxPercent: 19);
+
+            desc.AddTradeLineItem(name: "Bemessungsgrundlage und Umsatzsteuer auf Altteil",
+                                  unitCode: QuantityCodes.C62,
+                                  unitQuantity: 1,
+                                  billedQuantity: 1,
+                                  netUnitPrice: 100,
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
+                                  taxPercent: 19);
+
+            desc.AddTradeLineItem(name: "Korrektur/Stornierung Bemessungsgrundlage der Umsatzsteuer auf Altteil",
+                                  unitCode: QuantityCodes.C62,
+                                  unitQuantity: 1,
+                                  billedQuantity: -1,
+                                  netUnitPrice: 100,
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.Z,
+                                  taxPercent: 0);
+
+            desc.AddApplicableTradeTax(basisAmount: 1000,
+                                       percent: 19,
+                                       taxAmount: 190,
+                                       TaxTypes.VAT,
+                                       TaxCategoryCodes.S);
+
+            desc.SetTotals(lineTotalAmount: 1500m,
+                     taxBasisAmount: 1500m,
+                     taxTotalAmount: 304m,
+                     grandTotalAmount: 1804m,
+                     duePayableAmount: 1804m
+                    );
+
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            loadedInvoice.Invoicee.Should().BeNull();
+        }
+
+        [Fact]
+        public void TestBasisQuantityStandard()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems.Clear();
+            desc.AddTradeLineItem(name: "Joghurt Banane",
+                                  unitCode: QuantityCodes.H87,
+                                  sellerAssignedID: "ARNR2",
+                                  id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
+                                  grossUnitPrice: 5.5m,
+                                  netUnitPrice: 5.5m,
+                                  billedQuantity: 50,
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
+                                  taxPercent: 7
+                                  );
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var doc = new XmlDocument();
+            doc.Load(ms);
+            var nsmgr = new XmlNamespaceManager(doc.DocumentElement!.OwnerDocument.NameTable);
+            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+
+            XmlNode? node = doc.SelectSingleNode("//ram:SpecifiedTradeSettlementLineMonetarySummation//ram:LineTotalAmount", nsmgr);
+            node.Should().NotBeNull();
+            node!.InnerText.Should().Be("275.00");
+        }
+
+        [Fact]
+        public void TestBasisQuantityMultiple()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems.Clear();
+            TradeLineItem tli = desc.AddTradeLineItem(name: "Joghurt Banane",
+                                                      unitCode: QuantityCodes.H87,
+                                                      sellerAssignedID: "ARNR2",
+                                                      id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
+                                                      grossUnitPrice: 5.5m,
+                                                      netUnitPrice: 5.5m,
+                                                      billedQuantity: 50,
+                                                      taxType: TaxTypes.VAT,
+                                                      categoryCode: TaxCategoryCodes.S,
+                                                      taxPercent: 7,
+                                                      unitQuantity: 10
+                                                      );
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var doc = new XmlDocument();
+            doc.Load(ms);
+            var nsmgr = new XmlNamespaceManager(doc.DocumentElement!.OwnerDocument.NameTable);
+            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+
+            XmlNode? node = doc.SelectSingleNode("//ram:SpecifiedTradeSettlementLineMonetarySummation//ram:LineTotalAmount", nsmgr);
+            node.Should().NotBeNull();
+            node!.InnerText.Should().Be("27.50");
+        }
+
+        [Fact]
+        public void TestTradeAllowanceChargeWithoutExplicitPercentage()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            // fake values, does not matter for our test case
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, string.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
+
+            var ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Position = 0;
+
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
+
+            allowanceCharges.Should().HaveCount(1);
+            allowanceCharges[0].BasisAmount.Should().Be(100m);
+            allowanceCharges[0].Amount.Should().Be(10m);
+            allowanceCharges[0].ChargePercentage.Should().BeNull();
+        }
+
+        [Fact]
+        public void TestTradeAllowanceChargeWithExplicitPercentage()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            // fake values, does not matter for our test case
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, string.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
+
+            var ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Position = 0;
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
+
+            allowanceCharges.Should().HaveCount(1);
+            allowanceCharges[0].BasisAmount.Should().Be(100m);
+            allowanceCharges[0].Amount.Should().Be(10m);
+            allowanceCharges[0].ChargePercentage.Should().Be(12);
+        }
+
+        [Fact]
+        public void TestReferenceXRechnung21UBL()
+        {
+            var path = @"..\..\..\..\demodata\xRechnung\xRechnung UBL.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            var desc = InvoiceDescriptor.Load(path);
+
+            desc.Profile.Should().Be(Profile.XRechnung);
+            desc.Type.Should().Be(InvoiceType.Invoice);
+
+            desc.InvoiceNo.Should().Be("0815-99-1-a");
+            desc.InvoiceDate.Should().Be(new DateTime(2020, 6, 21));
+            desc.PaymentReference.Should().Be("0815-99-1-a");
+            desc.OrderNo.Should().Be("0815-99-1");
+            desc.Currency.Should().Be(CurrencyCodes.EUR);
+
+            desc.Buyer.Name.Should().Be("Rechnungs Roulette GmbH & Co KG");
+            desc.Buyer.City.Should().Be("Klein Schlappstadt a.d. Lusche");
+            desc.Buyer.Postcode.Should().Be("12345");
+            desc.Buyer.Country.Should().Be(CountryCodes.DE);
+            desc.Buyer.Street.Should().Be("Beispielgasse 17b");
+            desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName.Should().Be("Rechnungs Roulette GmbH & Co KG");
+
+            desc.BuyerContact.Name.Should().Be("Manfred Mustermann");
+            desc.BuyerContact.EmailAddress.Should().Be("manfred.mustermann@rr.de");
+            desc.BuyerContact.PhoneNo.Should().Be("012345 98 765 - 44");
+
+            desc.Seller.Name.Should().Be("Harry Hirsch Holz- und Trockenbau");
+            desc.Seller.City.Should().Be("Klein Schlappstadt a.d. Lusche");
+            desc.Seller.Postcode.Should().Be("12345");
+            desc.Seller.Country.Should().Be(CountryCodes.DE);
+            desc.Seller.Street.Should().Be("Beispielgasse 17a");
+            desc.Seller.SpecifiedLegalOrganization.TradingBusinessName.Should().Be("Harry Hirsch Holz- und Trockenbau");
+
+            desc.SellerContact.Name.Should().Be("Harry Hirsch");
+            desc.SellerContact.EmailAddress.Should().Be("harry.hirsch@hhhtb.de");
+            desc.SellerContact.PhoneNo.Should().Be("012345 78 657 - 8");
+
+            desc.TradeLineItems.Should().HaveCount(2);
+            desc.TradeLineItems.Should().SatisfyRespectively
+            (
+                first =>
+                {
+                    first.SellerAssignedID.Should().Be("0815");
+                    first.Name.Should().Be("Leimbinder");
+                    first.Description.Should().Be("Leimbinder 2x18m; Birke");
+                    first.BilledQuantity.Should().Be(1);
+                    first.LineTotalAmount.Should().Be(1245.98m);
+                    first.TaxPercent.Should().Be(19);
+                },
+                second =>
+                {
+                    second.SellerAssignedID.Should().Be("MON");
+                    second.Name.Should().Be("Montage");
+                    second.Description.Should().Be("Montage durch Fachpersonal");
+                    second.BilledQuantity.Should().Be(1);
+                    second.LineTotalAmount.Should().Be(200.00m);
+                    second.TaxPercent.Should().Be(7);
+                }
+            );
+
+            desc.LineTotalAmount.Should().Be(1445.98m);
+            desc.TaxTotalAmount.Should().Be(250.74m);
+            desc.GrandTotalAmount.Should().Be(1696.72m);
+            desc.DuePayableAmount.Should().Be(1696.72m);
+
+            desc.Taxes.Should().HaveCount(2);
+            desc.Taxes.Should().SatisfyRespectively
+            (
+                first =>
+                {
+                    first.TaxAmount.Should().Be(236.74m);
+                    first.BasisAmount.Should().Be(1245.98m);
+                    first.Percent.Should().Be(19);
+                    first.TypeCode.Should().Be(TaxTypes.VAT);
+                    first.CategoryCode.Should().Be(TaxCategoryCodes.S);
+                },
+                second =>
+                {
+                    second.TaxAmount.Should().Be(14.0000m);
+                    second.BasisAmount.Should().Be(200.00m);
+                    second.Percent.Should().Be(7);
+                    second.TypeCode.Should().Be(TaxTypes.VAT);
+                    second.CategoryCode.Should().Be(TaxCategoryCodes.S);
+                }
+            );
+
+            desc.GetTradePaymentTerms().First().DueDate.Should().Be(new DateTime(2020, 6, 21));
+
+            desc.CreditorBankAccounts.Should().HaveCount(1);
+            desc.CreditorBankAccounts.Should().SatisfyRespectively
+            (
+                first =>
+                {
+                    first.IBAN.Should().Be("DE12500105170648489890");
+                    first.BIC.Should().Be("INGDDEFFXXX");
+                    first.Name.Should().Be("Harry Hirsch");
+                }
+            );
+
+            desc.PaymentMeans.TypeCode.Should().Be(PaymentMeansTypeCodes.CreditTransfer);
+        }
+
+        [Fact]
+        public void TestWriteAndReadDespatchAdviceDocumentReferenceXRechnung()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            var despatchAdviceNo = "421567982";
+            var despatchAdviceDate = new DateTime(2024, 5, 14);
+            desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.DespatchAdviceReferencedDocument.ID.Should().Be(despatchAdviceNo);
+            loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime.Should().Be(despatchAdviceDate);
+        }
+
+        [Fact]
+        public void TestSpecifiedTradeAllowanceCharge()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
+
+            var ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Position = 0;
+
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            TradeAllowanceCharge allowanceCharge = loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowanceCharges().First();
+
+            allowanceCharge.ChargeIndicator.Should().BeFalse();//false = discount
+            //CurrencyCodes are not written bei InvoiceDescriptor22Writer
+            allowanceCharge.Currency.Should().Be(CurrencyCodes.Unknown);
+
+            allowanceCharge.BasisAmount.Should().Be(198m);
+            allowanceCharge.ActualAmount.Should().Be(19.8m);
+            allowanceCharge.ChargePercentage.Should().Be(10m);
+            allowanceCharge.Reason.Should().Be("Discount 10%");
+        }
+
+        [Fact]
+        public void TestSellerDescription()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            var description = "Test description";
+
+            invoice.SetSeller(name: "Lieferant GmbH",
+                              postcode: "80333",
+                              city: "München",
+                              street: "Lieferantenstraße 20",
+                              country: CountryCodes.DE,
+                              id: string.Empty,
+                              globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                              legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"),
+                              description: description
+                              );
+
+            var ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Position = 0;
+
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.Seller.Description.Should().Be(description);
+        }
+
+        [Fact]
+        public void TestSellerContact()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            var description = "Test description";
+
+            invoice.SetSeller(name: "Lieferant GmbH",
+                              postcode: "80333",
+                              city: "München",
+                              street: "Lieferantenstraße 20",
+                              country: CountryCodes.DE,
+                              id: string.Empty,
+                              globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                              legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"),
+                              description: description
+                              );
+
+            const string SELLER_CONTACT = "1-123";
+            const string ORG_UNIT = "2-123";
+            const string EMAIL_ADDRESS = "3-123";
+            const string PHONE_NO = "4-123";
+            const string FAX_NO = "5-123";
+            invoice.SetSellerContact(SELLER_CONTACT, ORG_UNIT, EMAIL_ADDRESS, PHONE_NO, FAX_NO);
+
+            var ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Position = 0;
+
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.SellerContact.Should().NotBeNull();
+            loadedInvoice.SellerContact.Name.Should().Be(SELLER_CONTACT);
+            loadedInvoice.SellerContact.OrgUnit.Should().Be(ORG_UNIT);
+            loadedInvoice.SellerContact.EmailAddress.Should().Be(EMAIL_ADDRESS);
+            loadedInvoice.SellerContact.PhoneNo.Should().Be(PHONE_NO);
+            loadedInvoice.SellerContact.FaxNo.Should().Be(FAX_NO);
+
+            loadedInvoice.Seller.Description.Should().Be(description);
+        }
+
+        [Fact]
+        public void ShouldLoadCiiWithoutQdtNamespace()
+        {
+            var path = @"..\..\..\..\demodata\xRechnung\xRechnung CII - without qdt.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            var desc = InvoiceDescriptor.Load(path);
+
+            desc.Profile.Should().Be(Profile.XRechnung);
+            desc.Type.Should().Be(InvoiceType.Invoice);
+            desc.InvoiceNo.Should().Be("123456XX");
+            desc.TradeLineItems.Should().HaveCount(2);
+            desc.LineTotalAmount.Should().Be(314.86m);
+        }
+
+        [Fact]
+        public void TestDesignatedProductClassificationWithFullClassification()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().AddDesignatedProductClassification(
+                DesignatedProductClassificationClassCodes.HS,
+                "List Version ID Value",
+                "Class Code",
+                "Class Name");
+
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            // string comparison
+            ms.Seek(0, SeekOrigin.Begin);
+            var reader = new StreamReader(ms);
+            var content = reader.ReadToEnd();
+            content.Should().Contain("<ram:DesignatedProductClassification>");
+            content.Should().Contain("<ram:ClassCode listID=\"HS\" listVersionID=\"List Version ID Value\">Class Code</ram:ClassCode>");
+            content.Should().Contain("<ram:ClassName>Class Name</ram:ClassName>");
+
+            // structure comparison
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            loadedInvoice.TradeLineItems
+                .First()
+                .GetDesignatedProductClassifications()
+                .First()
+                .ListID
+                .Should().Be(DesignatedProductClassificationClassCodes.HS);
+            DesignatedProductClassification prodClass = loadedInvoice.TradeLineItems
+                .First()
+                .GetDesignatedProductClassifications()
+                .First();
+            prodClass.ListVersionID.Should().Be("List Version ID Value");
+            prodClass.ClassCode.Should().Be("Class Code");
+            prodClass.ClassName.Should().Be("Class Name");
+        }
+
+        [Fact]
+        public void TestDesignatedProductClassificationWithEmptyVersionId()
+        {
+            // test with empty version id value
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().AddDesignatedProductClassification(
+                DesignatedProductClassificationClassCodes.HS,
+                null,
+                "Class Code",
+                "Class Name"
+                );
+
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            DesignatedProductClassification prodClass = loadedInvoice.TradeLineItems
+                .First()
+                .GetDesignatedProductClassifications()
+                .First();
+            prodClass.ListID.Should().Be(DesignatedProductClassificationClassCodes.HS);
+            prodClass.ListVersionID.Should().BeEmpty();
+            prodClass.ClassCode.Should().Be("Class Code");
+            prodClass.ClassName.Should().Be("Class Name");
+        }
+
+        [Fact]
+        public void TestDesignatedProductClassificationWithEmptyListIdAndVersionId()
+        {
+            // test with empty version id value
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().AddDesignatedProductClassification(
+                DesignatedProductClassificationClassCodes.HS,
+                null,
+                "Class Code"
+                );
+
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            DesignatedProductClassification prodClass = loadedInvoice.TradeLineItems
+                .First()
+                .GetDesignatedProductClassifications()
+                .First();
+            prodClass.ListID.Should().Be(DesignatedProductClassificationClassCodes.HS);
+            prodClass.ListVersionID.Should().BeEmpty();
+            prodClass.ClassCode.Should().Be("Class Code");
+            prodClass.ClassName.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void TestDesignatedProductClassificationWithoutAnyOptionalInformation()
+        {
+            // test with empty version id value
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().AddDesignatedProductClassification(DesignatedProductClassificationClassCodes.HS);
+
+            var ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            DesignatedProductClassification prodClass = loadedInvoice.TradeLineItems
+                .First()
+                .GetDesignatedProductClassifications()
+                .First();
+            prodClass.ListID.Should().Be(DesignatedProductClassificationClassCodes.HS);
+            prodClass.ListVersionID.Should().BeEmpty();
+            prodClass.ClassCode.Should().BeEmpty();
+            prodClass.ClassName.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void TestPaymentTermsMultiCardinality()
+        {
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
+            desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            paymentTerms.Should().NotBeNull();
+            paymentTerms.Should().HaveCount(2);
+            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
+            paymentTerm.Should().NotBeNull();
+            paymentTerm!.Description.Should().Be("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018");
+            paymentTerm.DueDate.Should().Be(timestamp.AddDays(14));
+
+            paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Skonto);
+            paymentTerm.Should().NotBeNull();
+            paymentTerm!.Description.Should().Be("3% Skonto innerhalb 10 Tagen bis 15.03.2018");
+            paymentTerm.DueDate.Should().Be(new DateTime(2018, 3, 15));
+            paymentTerm.Percentage.Should().Be(3m);
+        }
+
+        [Fact]
+        public void TestPaymentTermsSingleCardinality()
+        {
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), percentage: 3m);
+            desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            paymentTerms.Should().NotBeNull();
+            paymentTerms.Should().HaveCount(1);
+            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            paymentTerm.Should().NotBeNull();
+            string expectedDescription = """
+                Zahlbar innerhalb 30 Tagen netto bis 04.04.2018
+                3% Skonto innerhalb 10 Tagen bis 15.03.2018
+                """;
+            paymentTerm!.Description.Should().Be(expectedDescription);
+            paymentTerm.DueDate.Should().Be(timestamp.AddDays(14));
+        }
+
+        [Fact]
+        public void TestPaymentTermsSingleCardinalityStructured()
+        {
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms(string.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
+            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);
+            desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            paymentTerms.Should().NotBeNull();
+            paymentTerms.Should().HaveCount(1);
+            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            paymentTerm.Should().NotBeNull();
+            paymentTerm!.Description.Should().Be($"#SKONTO#TAGE=14#PROZENT=2.25#{XmlConstants.XmlNewLine}Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#");
+            paymentTerm.DueDate.Should().Be(timestamp.AddDays(14));
+            paymentTerm.PaymentTermsType.Should().BeNull();
+            paymentTerm.DueDays.Should().BeNull();
+            paymentTerm.Percentage.Should().BeNull();
+        }
+
+        [Fact]
+        public void TestBuyerOrderReferenceLineId()
+        {
+            var path = @"..\..\..\..\demodata\zugferd22\zugferd_2p2_EXTENDED_Fremdwaehrung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            var desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID.Should().Be("1");
+            desc.TradeLineItems[0].BuyerOrderReferencedDocument.ID.Should().Be("ORDER84359");
+        }
+
+        [Fact]
+        public void TestRequiredDirectDebitFieldsShouldExist()
+        {
+            var d = new InvoiceDescriptor
+            {
+                Type = InvoiceType.Invoice,
+                InvoiceNo = "471102",
+                Currency = CurrencyCodes.EUR,
+                InvoiceDate = new DateTime(2018, 3, 5)
+            };
+            d.AddTradeLineItem(
+                lineID: "1",
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
+                sellerAssignedID: "TB100A4",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 11.781m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            d.SetSeller(
+                id: null,
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                name: "Lieferant GmbH",
+                postcode: "80333",
+                city: "München",
+                street: "Lieferantenstraße 20",
+                country: CountryCodes.DE,
+                legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
+            d.SetBuyer(
+                id: "GE2020211",
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
+                name: "Kunden AG Mitte",
+                postcode: "69876",
+                city: "Frankfurt",
+                street: "Kundenstraße 15",
+                country: CountryCodes.DE);
+            d.SetPaymentMeansSepaDirectDebit(
+                "DE98ZZZ09999999999",
+                "REF A-123");
+            d.AddDebitorFinancialAccount(
+                "DE21860000000086001055",
+                null);
+            d.AddTradePaymentTerms(
+                "Der Betrag in Höhe von EUR 235,62 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
+            d.SetTotals(
+                198.00m,
+                0.00m,
+                0.00m,
+                198.00m,
+                37.62m,
+                235.62m,
+                0.00m,
+                235.62m);
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.FC,
+                    No = "201/113/40209"
+                });
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.VA,
+                    No = "DE123456789"
+                });
+            d.AddApplicableTradeTax(
+                198.00m,
+                19.00m,
+                TaxTypes.VAT,
+                TaxCategoryCodes.S);
+
+            using var stream = new MemoryStream();
+            d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            // test the raw xml file
+            var content = Encoding.UTF8.GetString(stream.ToArray());
+            content.Should().Contain($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>");
+            content.Should().Contain($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>");
+        }
+
+        [Fact]
+        public void TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
+        {
+            var d = new InvoiceDescriptor
+            {
+                Type = InvoiceType.Invoice,
+                InvoiceNo = "471102",
+                Currency = CurrencyCodes.EUR,
+                InvoiceDate = new DateTime(2018, 3, 5)
+            };
+            d.AddTradeLineItem(
+                lineID: "1",
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
+                sellerAssignedID: "TB100A4",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 11.781m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            d.SetSeller(
+                id: null,
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                name: "Lieferant GmbH",
+                postcode: "80333",
+                city: "München",
+                street: "Lieferantenstraße 20",
+                country: CountryCodes.DE,
+                legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
+            d.SetBuyer(
+                id: "GE2020211",
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
+                name: "Kunden AG Mitte",
+                postcode: "69876",
+                city: "Frankfurt",
+                street: "Kundenstraße 15",
+                country: CountryCodes.DE);
+            d.SetPaymentMeans(PaymentMeansTypeCodes.SEPACreditTransfer,
+                "Information of Payment Means",
+                "DE98ZZZ09999999999",
+                "REF A-123");
+            d.AddDebitorFinancialAccount(
+                "DE21860000000086001055",
+                null);
+            d.AddTradePaymentTerms(
+                "Der Betrag in Höhe von EUR 235,62 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
+            d.SetTotals(
+                198.00m,
+                0.00m,
+                0.00m,
+                198.00m,
+                37.62m,
+                235.62m,
+                0.00m,
+                235.62m);
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.FC,
+                    No = "201/113/40209"
+                });
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.VA,
+                    No = "DE123456789"
+                });
+            d.AddApplicableTradeTax(
+                198.00m,
+                19.00m,
+                TaxTypes.VAT,
+                TaxCategoryCodes.S);
+
+            using var stream = new MemoryStream();
+            d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            // test the raw xml file
+            var content = Encoding.UTF8.GetString(stream.ToArray());
+            content.Should().NotContain($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>");
+            content.Should().NotContain($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>");
+        }
     }
 }
