@@ -17,10 +17,8 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.XPath;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace s2industries.ZUGFeRD
 {
