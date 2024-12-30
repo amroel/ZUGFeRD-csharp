@@ -25,9 +25,6 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor23Writer : IInvoiceDescriptorWriter
     {
-        private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
-
-
         /// <summary>
         /// Saves the given invoice to the given stream.
         /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.        
