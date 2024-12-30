@@ -19,8 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
 
 
 namespace s2industries.ZUGFeRD
@@ -222,6 +220,10 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Party UltimateShipTo { get; set; }
 
+        /// <summary>
+        /// Initializes a new trade line item
+        /// </summary>
+        /// <param name="lineId"></param>
         public TradeLineItem(string lineId)
         {
             this.AssociatedDocument = new AssociatedDocument(lineId);
@@ -247,7 +249,7 @@ namespace s2industries.ZUGFeRD
                 Reason = reason
             });
         } // !AddTradeAllowanceCharge()
-        
+
 
         /// <summary>
         /// As an allowance or charge on item level, attaching it to the corresponding item.
@@ -341,12 +343,22 @@ namespace s2industries.ZUGFeRD
             this.AssociatedDocument.ParentLineID = parentLineId;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lineStatusCode"></param>
+        /// <param name="lineStatusReasonCode"></param>
         public void SetLineStatus(LineStatusCodes lineStatusCode, LineStatusReasonCodes lineStatusReasonCode)
         {
             this.AssociatedDocument.LineStatusCode = lineStatusCode;
             this.AssociatedDocument.LineStatusReasonCode = lineStatusReasonCode;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deliveryNoteId"></param>
+        /// <param name="deliveryNoteDate"></param>
         public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
@@ -356,7 +368,13 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetDeliveryNoteReferencedDocument()
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="typeCode"></param>
+        /// <param name="code"></param>
+        /// <param name="issueDateTime"></param>
         public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown, DateTime? issueDateTime = null)
         {
             this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
@@ -368,6 +386,12 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddAdditionalReferencedDocument()
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="unitQuantity"></param>
+        /// <param name="quantityCodes"></param>
         public void AddIncludedReferencedProduct(string name, decimal? unitQuantity = null, QuantityCodes? quantityCodes = null)
         {
             this.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
@@ -389,37 +413,37 @@ namespace s2industries.ZUGFeRD
         /// <param name="attachmentBinaryObject"></param>
         /// <param name="filename"></param>
         public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
-		{
-			this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
-			{
-				ReferenceTypeCode = referenceTypeCode,
-				ID = id,
-				IssueDateTime = issueDateTime,
-				Name = name,
-				AttachmentBinaryObject = attachmentBinaryObject,
-				Filename = filename,
-				TypeCode = typeCode
-			});
-		} // !AddAdditionalReferencedDocument()
+        {
+            this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            {
+                ReferenceTypeCode = referenceTypeCode,
+                ID = id,
+                IssueDateTime = issueDateTime,
+                Name = name,
+                AttachmentBinaryObject = attachmentBinaryObject,
+                Filename = filename,
+                TypeCode = typeCode
+            });
+        } // !AddAdditionalReferencedDocument()
 
 
-		/// <summary>
-		/// Returns all additional referenced documents for the trade line item
-		/// </summary>
-		/// <returns></returns>
-		public IList<AdditionalReferencedDocument> GetAdditionalReferencedDocuments()
-		{
-			return this._AdditionalReferencedDocuments;
-		} // !GetAdditionalReferencedDocuments()
+        /// <summary>
+        /// Returns all additional referenced documents for the trade line item
+        /// </summary>
+        /// <returns></returns>
+        public IList<AdditionalReferencedDocument> GetAdditionalReferencedDocuments()
+        {
+            return this._AdditionalReferencedDocuments;
+        } // !GetAdditionalReferencedDocuments()
 
 
 
-		/// <summary>
-		/// Sets a purchase order line reference. BT-132
-		/// Please note that XRechnung/ FacturX allows a maximum of one such reference and will only output the referenced order line id 
+        /// <summary>
+        /// Sets a purchase order line reference. BT-132
+        /// Please note that XRechnung/ FacturX allows a maximum of one such reference and will only output the referenced order line id 
         /// but not issuer assigned id and date
-		/// </summary>
-		public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
+        /// </summary>
+        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
@@ -428,7 +452,11 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetOrderReferencedDocument()
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contractReferencedId"></param>
+        /// <param name="contractReferencedDate"></param>
         public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
         {
             this.ContractReferencedDocument = new ContractReferencedDocument()
@@ -438,17 +466,20 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetContractReferencedDocument()
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="AccountID"></param>
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
         {
             AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
         }
 
-
-		/// <summary>
-		/// Adds an invoice line Buyer accounting reference. BT-133
+        /// <summary>
+        /// Adds an invoice line Buyer accounting reference. BT-133
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference
-		/// </summary>
-		public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+        /// </summary>
+        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {
@@ -458,14 +489,14 @@ namespace s2industries.ZUGFeRD
         }
 
 
-		/// <summary>
-		/// Adds a product classification
-		/// </summary>
-		/// <param name="className">Classification name. If you leave className empty, it will be omitted in the output</param>
-		/// <param name="classCode">Identifier of the item classification (optional)</param>
-		/// <param name="listID">Product classification name (optional)</param>
-		/// <param name="listVersionID">Version of product classification (optional)</param>		
-		public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes listID, string listVersionID = null, string classCode = null, string className = null)
+        /// <summary>
+        /// Adds a product classification
+        /// </summary>
+        /// <param name="className">Classification name. If you leave className empty, it will be omitted in the output</param>
+        /// <param name="classCode">Identifier of the item classification (optional)</param>
+        /// <param name="listID">Product classification name (optional)</param>
+        /// <param name="listVersionID">Version of product classification (optional)</param>		
+        public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes listID, string listVersionID = null, string classCode = null, string className = null)
         {
             this.DesignedProductClassifications.Add(new DesignatedProductClassification()
             {

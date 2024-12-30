@@ -16,11 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
-
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
@@ -74,9 +69,17 @@ namespace s2industries.ZUGFeRD
         CompanyNumber = 208
     }
 
-
+    /// <summary>
+    /// Extension methods for GlobalIDSchemeIdentifiers enum
+    /// </summary>
     public static class GlobalIDSchemeIdentifiersExtensions
     {
+        /// <summary>
+        /// Converts a string to a GlobalIDSchemeIdentifiers enum value
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="s">The string representation of the identifier</param>
+        /// <returns>The corresponding GlobalIDSchemeIdentifiers enum value</returns>
         public static GlobalIDSchemeIdentifiers FromString(this GlobalIDSchemeIdentifiers _, string s)
         {
             switch (s)
@@ -93,7 +96,11 @@ namespace s2industries.ZUGFeRD
             }
         } // !FromString()
 
-
+        /// <summary>
+        /// Converts a GlobalIDSchemeIdentifiers enum value to its string representation
+        /// </summary>
+        /// <param name="c">The GlobalIDSchemeIdentifiers enum value</param>
+        /// <returns>The string representation of the identifier</returns>
         public static string EnumToString(this GlobalIDSchemeIdentifiers c)
         {
             switch (c)

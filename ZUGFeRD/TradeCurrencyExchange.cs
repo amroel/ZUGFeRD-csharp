@@ -16,53 +16,61 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using s2industries.ZUGFeRD;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-	/// <summary>
-	/// Specification of the invoice currency, local currency and exchange rate
-	/// </summary>
-	public class TradeCurrencyExchange
-	{
-		/// <summary>
-		/// Invoice currency
-		/// </summary>
-		public CurrencyCodes SourceCurrency { get; private set; }
+    /// <summary>
+    /// Specification of the invoice currency, local currency and exchange rate
+    /// </summary>
+    public class TradeCurrencyExchange
+    {
+        /// <summary>
+        /// Invoice currency
+        /// </summary>
+        public CurrencyCodes SourceCurrency { get; private set; }
 
-		/// <summary>
-		/// Local currency
-		/// </summary>
-		public CurrencyCodes TargetCurrency { get; private set; }
+        /// <summary>
+        /// Local currency
+        /// </summary>
+        public CurrencyCodes TargetCurrency { get; private set; }
 
-		/// <summary>
-		/// Exchange rate
-		/// </summary>
-		public decimal ConversionRate { get; private set; }
+        /// <summary>
+        /// Exchange rate
+        /// </summary>
+        public decimal ConversionRate { get; private set; }
 
-		/// <summary>
-		/// Exchange rate date
-		/// </summary>
-		public DateTime? ConversionRateTimestamp { get; private set; }
+        /// <summary>
+        /// Exchange rate date
+        /// </summary>
+        public DateTime? ConversionRateTimestamp { get; private set; }
 
+        /// <summary>
+        /// Initializes the TradeCurrencyExchange object
+        /// </summary>
+        /// <param name="sourceCurrency"></param>
+        /// <param name="targetCurrency"></param>
+        /// <param name="conversionRate"></param>
+        public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate)
+        {
+            SourceCurrency = sourceCurrency;
+            TargetCurrency = targetCurrency;
+            ConversionRate = conversionRate;
+        } // !TradeCurrencyExchange()
 
-		public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate)
-		{
-			SourceCurrency = sourceCurrency;
-			TargetCurrency = targetCurrency;
-			ConversionRate = conversionRate;
-		} // !TradeCurrencyExchange()
-
-
-		public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate, DateTime conversionRateTimestamp)
-		{
-			SourceCurrency = sourceCurrency;
-			TargetCurrency = targetCurrency;
-			ConversionRate = conversionRate;
-			ConversionRateTimestamp = conversionRateTimestamp;
-		} // !TradeCurrencyExchange()
-	}
+        /// <summary>
+        /// Initializes the TradeCurrencyExchange object
+        /// </summary>
+        /// <param name="sourceCurrency"></param>
+        /// <param name="targetCurrency"></param>
+        /// <param name="conversionRate"></param>
+        /// <param name="conversionRateTimestamp"></param>
+        public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate, DateTime conversionRateTimestamp)
+        {
+            SourceCurrency = sourceCurrency;
+            TargetCurrency = targetCurrency;
+            ConversionRate = conversionRate;
+            ConversionRateTimestamp = conversionRateTimestamp;
+        } // !TradeCurrencyExchange()
+    }
 }

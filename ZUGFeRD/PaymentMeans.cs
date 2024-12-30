@@ -16,13 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// The means expressed as code, for how a payment is expected to be or has been settled.
+    /// </summary>
     public class PaymentMeans
     {
         /// <summary>

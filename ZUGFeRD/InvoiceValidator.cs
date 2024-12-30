@@ -18,9 +18,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD
 {
@@ -33,6 +30,11 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class InvoiceValidator
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <param name="filename"></param>
         public static void ValidateAndPrint(InvoiceDescriptor descriptor, string filename = null)
         {
             List<string> output = Validate(descriptor);
@@ -48,7 +50,11 @@ namespace s2industries.ZUGFeRD
             }
         } // !ValidateAndPrint()
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
         public static List<string> Validate(InvoiceDescriptor descriptor)
         {
             List<string> retval = new List<string>();
@@ -65,7 +71,7 @@ namespace s2industries.ZUGFeRD
 
             decimal lineTotal = 0m;
             Dictionary<decimal, decimal> lineTotalPerTax = new Dictionary<decimal, decimal>();
-            foreach(TradeLineItem item in descriptor.TradeLineItems)
+            foreach (TradeLineItem item in descriptor.TradeLineItems)
             {
                 decimal _total = 0m;
                 if (item.NetUnitPrice.HasValue)
@@ -159,7 +165,7 @@ namespace s2industries.ZUGFeRD
             }
 
             decimal _allowanceTotal = 0m;
-            foreach(TradeAllowanceCharge allowance in descriptor.GetTradeAllowanceCharges())
+            foreach (TradeAllowanceCharge allowance in descriptor.GetTradeAllowanceCharges())
             {
                 _allowanceTotal += allowance.ActualAmount;
             }

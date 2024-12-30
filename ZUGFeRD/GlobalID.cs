@@ -17,9 +17,6 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 
 namespace s2industries.ZUGFeRD
@@ -52,6 +49,9 @@ namespace s2industries.ZUGFeRD
         public GlobalIDSchemeIdentifiers? SchemeID { get; set; }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlobalID"/> class.
+        /// </summary>
         public GlobalID()
         {
             this.ID = String.Empty;
@@ -59,6 +59,11 @@ namespace s2industries.ZUGFeRD
         } // !GlobalID()
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlobalID"/> class with specified scheme ID and ID.
+        /// </summary>
+        /// <param name="schemeID">The scheme identifier.</param>
+        /// <param name="ID">The global identifier.</param>
         public GlobalID(GlobalIDSchemeIdentifiers schemeID, string ID)
         {
             this.ID = ID;

@@ -18,8 +18,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -84,7 +82,9 @@ namespace s2industries.ZUGFeRD
         EReporting = 128,
     }
 
-
+    /// <summary>
+    /// Extension methods for the Profile enum.
+    /// </summary>
     public static class ProfileExtensions
     {
         internal static Profile FromString(this Profile _, string s)
@@ -150,7 +150,7 @@ namespace s2industries.ZUGFeRD
                 case ZUGFeRDVersion.Version20:
                     switch (profile)
                     {
-                        case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";                        
+                        case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";
                         case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic";
                         case Profile.BasicWL: return "urn:zugferd.de:2p0:basicwl";
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
@@ -179,14 +179,18 @@ namespace s2industries.ZUGFeRD
                             }
                         case Profile.EReporting: return "urn.cpro.gouv.fr:1p0:ereporting";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
-                    }                    
+                    }
                 default:
                     // return "";
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
         } // !EnumToString()
 
-
+        /// <summary>
+        /// Gets the XMP name for the Profile enum value.
+        /// </summary>
+        /// <param name="profile">The Profile enum value.</param>
+        /// <returns>The corresponding XMP name.</returns>
         public static string GetXMPName(this Profile profile)
         {
             switch (profile)

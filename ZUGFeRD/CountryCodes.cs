@@ -17,9 +17,6 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -1570,9 +1567,17 @@ namespace s2industries.ZUGFeRD
 
     }
 
-
+    /// <summary>
+    /// Extension methods for the CountryCodes enum.
+    /// </summary>
     public static class CountryCodesExtensions
     {
+        /// <summary>
+        /// Converts a string to a CountryCodes enum value.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="s">The string representation of the country code.</param>
+        /// <returns>The corresponding CountryCodes enum value.</returns>
         public static CountryCodes FromString(this CountryCodes _, string s)
         {
             // Special treatment for temporary code of Kosovo
@@ -1591,7 +1596,11 @@ namespace s2industries.ZUGFeRD
             }
         } // !FromString()
 
-
+        /// <summary>
+        /// Converts a CountryCodes enum value to its string representation.
+        /// </summary>
+        /// <param name="c">The CountryCodes enum value.</param>
+        /// <returns>The string representation of the country code.</returns>
         public static string EnumToString(this CountryCodes c)
         {
             // Special treatment for temporary code of Kosovo

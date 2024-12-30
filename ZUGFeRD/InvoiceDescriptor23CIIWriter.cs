@@ -420,8 +420,8 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
                 }
 
-                /// TODO: Add ShipToTradeParty
-                /// TODO: Add UltimateShipToTradeParty
+                // TODO: Add ShipToTradeParty
+                // TODO: Add UltimateShipToTradeParty
 
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeDelivery
                 #endregion

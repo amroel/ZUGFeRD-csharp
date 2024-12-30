@@ -16,12 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Enum representing the different ZUGFeRD formats.
+    /// </summary>
     public enum ZUGFeRDFormats
     {
         /// <summary>

@@ -128,6 +128,9 @@ namespace s2industries.ZUGFeRD
         /// A group of business terms providing contact information relevant for the buyer.
         /// </summary>
         public Contact BuyerContact { get; set; }
+        /// <summary>
+        /// Buyer VAT identifier
+        /// </summary>
         public List<TaxRegistration> BuyerTaxRegistration { get; set; } = new List<TaxRegistration>();
 
         /// <summary>
@@ -140,7 +143,15 @@ namespace s2industries.ZUGFeRD
         /// BG-4
         /// </summary>
         public Party Seller { get; set; }
+        /// <summary>
+        /// Seller contact information
+        /// 
+        /// A group of business terms providing contact information relevant for the seller.
+        /// </summary>
         public Contact SellerContact { get; set; }
+        /// <summary>
+        /// Seller VAT identifier
+        /// </summary>
         public List<TaxRegistration> SellerTaxRegistration { get; set; } = new List<TaxRegistration>();
 
         /// <summary>
@@ -560,7 +571,12 @@ namespace s2industries.ZUGFeRD
             return retval;
         } // !CreateInvoice()
 
-
+        /// <summary>
+        /// Adds a new note to the invoice
+        /// </summary>
+        /// <param name="note"></param>
+        /// <param name="subjectCode"></param>
+        /// <param name="contentCode"></param>
         public void AddNote(string note, SubjectCodes subjectCode = SubjectCodes.Unknown, ContentCodes contentCode = ContentCodes.Unknown)
         {
             /*
@@ -572,7 +588,18 @@ namespace s2industries.ZUGFeRD
             this.Notes.Add(new Note(note, subjectCode, contentCode));
         } // !AddNote()        
 
-
+        /// <summary>
+        /// Sets buyer information
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="postcode"></param>
+        /// <param name="city"></param>
+        /// <param name="street"></param>
+        /// <param name="country"></param>
+        /// <param name="id"></param>
+        /// <param name="globalID"></param>
+        /// <param name="receiver"></param>
+        /// <param name="legalOrganization"></param>
         public void SetBuyer(string name, string postcode, string city, string street, CountryCodes country, string id = null,
                              GlobalID globalID = null, string receiver = "", LegalOrganization legalOrganization = null)
         {
@@ -590,7 +617,18 @@ namespace s2industries.ZUGFeRD
             };
         }
 
-
+        /// <summary>
+        /// Sets seller information
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="postcode"></param>
+        /// <param name="city"></param>
+        /// <param name="street"></param>
+        /// <param name="country"></param>
+        /// <param name="id"></param>
+        /// <param name="globalID"></param>
+        /// <param name="legalOrganization"></param>
+        /// <param name="description"></param>
         public void SetSeller(string name, string postcode, string city, string street, CountryCodes country, string id = null,
                               GlobalID globalID = null, LegalOrganization legalOrganization = null, string description = null)
         {
@@ -608,7 +646,14 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetSeller()
 
-
+        /// <summary>
+        /// Sets the sellers contact information
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="orgunit"></param>
+        /// <param name="emailAddress"></param>
+        /// <param name="phoneno"></param>
+        /// <param name="faxno"></param>
         public void SetSellerContact(string name = "", string orgunit = "", string emailAddress = "", string phoneno = "", string faxno = "")
         {
             this.SellerContact = new Contact()
@@ -621,7 +666,14 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetSellerContact()
 
-
+        /// <summary>
+        /// Sets the buyers contact information
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="orgunit"></param>
+        /// <param name="emailAddress"></param>
+        /// <param name="phoneno"></param>
+        /// <param name="faxno"></param>
         public void SetBuyerContact(string name, string orgunit = "", string emailAddress = "", string phoneno = "", string faxno = "")
         {
             this.BuyerContact = new Contact()
@@ -649,7 +701,11 @@ namespace s2industries.ZUGFeRD
             };
         } // SetSpecifiedProcuringProject
 
-
+        /// <summary>
+        /// Adds VAT identification number of the buyer
+        /// </summary>
+        /// <param name="no"></param>
+        /// <param name="schemeID"></param>
         public void AddBuyerTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
         {
             this.BuyerTaxRegistration.Add(new TaxRegistration()
@@ -659,7 +715,11 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddBuyerTaxRegistration()
 
-
+        /// <summary>
+        /// Adds VAT identification number of the seller
+        /// </summary>
+        /// <param name="no"></param>
+        /// <param name="schemeID"></param>
         public void AddSellerTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
         {
             this.SellerTaxRegistration.Add(new TaxRegistration()
@@ -736,8 +796,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Sets detailed information about the corresponding despatch advice
         /// </summary>
-        /// <param name="deliveryNoteNo"></param>
-        /// <param name="deliveryNoteDate"></param>
+        /// <param name="despatchAdviceNo"></param>
+        /// <param name="despatchAdviceDate"></param>
         public void SetDespatchAdviceReferencedDocument(string despatchAdviceNo, DateTime? despatchAdviceDate = null)
         {
             this.DespatchAdviceReferencedDocument = new DespatchAdviceReferencedDocument()
@@ -1096,6 +1156,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="filename">The filename where the data should be saved to.</param>
         /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
         /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
+        /// <param name="format"></param>
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
@@ -1318,7 +1379,13 @@ namespace s2industries.ZUGFeRD
             return newItem;
         } // !AddTradeLineItem()
 
-
+        /// <summary>
+        /// Sets the payment means for the invoice.
+        /// </summary>
+        /// <param name="paymentCode"></param>
+        /// <param name="information"></param>
+        /// <param name="identifikationsnummer"></param>
+        /// <param name="mandatsnummer"></param>
         public void SetPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
         {
             this.PaymentMeans = new PaymentMeans
@@ -1386,7 +1453,14 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddCreditorFinancialAccount()
 
-
+        /// <summary>
+        /// Adds finiancial account information for the debitor
+        /// </summary>
+        /// <param name="iban"></param>
+        /// <param name="bic"></param>
+        /// <param name="id"></param>
+        /// <param name="bankleitzahl"></param>
+        /// <param name="bankName"></param>
         public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
             this.DebitorBankAccounts.Add(new BankAccount()
@@ -1399,13 +1473,20 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddDebitorFinancialAccount()
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="AccountID"></param>
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
         {
             AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="AccountID"></param>
+        /// <param name="AccountTypeCode"></param>
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
