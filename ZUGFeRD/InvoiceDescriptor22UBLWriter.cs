@@ -431,10 +431,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("cac", "TaxCategory");
                 Writer.WriteElementString("cbc", "ID", tradeAllowanceCharge.Tax.CategoryCode.ToString());
-                if (tradeAllowanceCharge.Tax.Percent != null)
-                {
-                    Writer.WriteElementString("cbc", "Percent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
-                }
+                Writer.WriteElementString("cbc", "Percent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
                 Writer.WriteStartElement("cac", "TaxScheme");
                 Writer.WriteElementString("cbc", "ID", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
                 Writer.WriteEndElement(); // cac:TaxScheme
