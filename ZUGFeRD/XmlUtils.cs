@@ -73,9 +73,9 @@ namespace s2industries.ZUGFeRD
             {
                 return defaultValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             };
         } // NodeAsString()
 
